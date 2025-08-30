@@ -77,8 +77,30 @@ const BreathingScreen: React.FC = () => {
   const [countdown, setCountdown] = useState(0);
   const [currentCycle, setCurrentCycle] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(true);
   
   const method = breathingMethods.find(m => m.id === methodId);
+
+  // 初始化音频上下文
+  useEffect(() => {
+    const initAudio = () => {
+      try {
+        const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        setAudioContext(ctx);
+      } catch (error) {
+        console.log('音频上下文初始化失败:', error);
+      }
+    };
+    
+    initAudio();
+    
+    return () => {
+      if (audioContext) {
+        audioContext.close();
+      }
+    };
+  }, []);
 
   const triggerVibration = useCallback(() => {
     if ('vibrate' in navigator) {
@@ -86,22 +108,79 @@ const BreathingScreen: React.FC = () => {
     }
   }, []);
 
-  const playSound = useCallback(() => {
-    // 创建音频上下文来播放提示音
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+  // 播放不同阶段的提示音
+  const playPhaseSound = useCallback((phase: BreathingPhase) => {
+    if (!audioContext || !soundEnabled) return;
     
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // 根据阶段设置不同的音调和持续时间
+      let frequency = 800;
+      let duration = 0.2;
+      
+      switch (phase) {
+        case 'inhale':
+          frequency = 600; // 较低的音调表示吸气
+          duration = 0.3;
+          break;
+        case 'hold':
+          frequency = 800; // 中等音调表示保持
+          duration = 0.2;
+          break;
+        case 'exhale':
+          frequency = 1000; // 较高的音调表示呼气
+          duration = 0.4;
+          break;
+        case 'ready':
+          frequency = 500;
+          duration = 0.5;
+          break;
+        case 'finished':
+          frequency = 400;
+          duration = 0.8;
+          break;
+      }
+      
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + duration);
+    } catch (error) {
+      console.log('播放声音失败:', error);
+    }
+  }, [audioContext, soundEnabled]);
+
+  // 播放倒计时提示音（最后3秒）
+  const playCountdownSound = useCallback((count: number) => {
+    if (!audioContext || !soundEnabled || count > 3) return;
     
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.1);
-  }, []);
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // 倒计时音调逐渐升高
+      const frequency = 400 + (4 - count) * 200;
+      
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    } catch (error) {
+      console.log('播放倒计时声音失败:', error);
+    }
+  }, [audioContext, soundEnabled]);
 
   const startBreathing = () => {
     setIsActive(true);
@@ -109,7 +188,7 @@ const BreathingScreen: React.FC = () => {
     setCurrentPhase('inhale');
     setCountdown(method?.inhale || 4);
     triggerVibration();
-    playSound();
+    playPhaseSound('inhale');
   };
 
   const stopBreathing = () => {
@@ -124,36 +203,42 @@ const BreathingScreen: React.FC = () => {
 
     const timer = setInterval(() => {
       setCountdown(prev => {
+        // 播放倒计时提示音
+        if (prev <= 3 && prev > 0) {
+          playCountdownSound(prev);
+        }
+        
         if (prev <= 1) {
           // 当前阶段结束，进入下一阶段
           if (currentPhase === 'inhale') {
             if (method.hold > 0) {
               setCurrentPhase('hold');
               triggerVibration();
-              playSound();
+              playPhaseSound('hold');
               return method.hold;
             } else {
               setCurrentPhase('exhale');
               triggerVibration();
-              playSound();
+              playPhaseSound('exhale');
               return method.exhale;
             }
           } else if (currentPhase === 'hold') {
             setCurrentPhase('exhale');
             triggerVibration();
-            playSound();
+            playPhaseSound('exhale');
             return method.exhale;
           } else if (currentPhase === 'exhale') {
             // 一个完整循环结束
             if (currentCycle >= method.cycles) {
               setCurrentPhase('finished');
               setIsActive(false); // 停止计时器
+              playPhaseSound('finished');
               return 0;
             } else {
               setCurrentCycle(prev => prev + 1);
               setCurrentPhase('inhale');
               triggerVibration();
-              playSound();
+              playPhaseSound('inhale');
               return method.inhale;
             }
           }
@@ -163,7 +248,7 @@ const BreathingScreen: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isActive, currentPhase, currentCycle, method, triggerVibration, playSound]);
+  }, [isActive, currentPhase, currentCycle, method, triggerVibration, playPhaseSound, playCountdownSound]);
 
   useEffect(() => {
     if (!method) {
@@ -237,6 +322,13 @@ const BreathingScreen: React.FC = () => {
             ← 返回
           </button>
           <h1 className="method-title">{method.name}</h1>
+          <button 
+            className={`sound-toggle ${soundEnabled ? 'enabled' : 'disabled'}`}
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            title={soundEnabled ? '关闭声音' : '开启声音'}
+          >
+            {soundEnabled ? '🔊' : '🔇'}
+          </button>
         </div>
 
         <div className="breathing-circle-container">
@@ -319,7 +411,15 @@ const BreathingScreen: React.FC = () => {
               <li>找一个安静舒适的地方坐下</li>
               <li>保持背部挺直，肩膀放松</li>
               <li>跟随屏幕提示进行呼吸</li>
-              <li>手机震动时会提醒你改变呼吸节奏</li>
+              <li>手机震动和声音会提醒你改变呼吸节奏</li>
+              <li>不同音调的声音提示：
+                <ul>
+                  <li>低音调（600Hz）：吸气</li>
+                  <li>中音调（800Hz）：保持</li>
+                  <li>高音调（1000Hz）：呼气</li>
+                  <li>倒计时最后3秒会有提示音</li>
+                </ul>
+              </li>
               <li>专注于你的呼吸，让思绪平静下来</li>
             </ul>
           )}
