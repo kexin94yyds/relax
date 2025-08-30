@@ -94,13 +94,16 @@ const BreathingScreen: React.FC = () => {
     };
     
     initAudio();
-    
+  }, []);
+
+  // 清理音频上下文
+  useEffect(() => {
     return () => {
       if (audioContext) {
         audioContext.close();
       }
     };
-  }, []);
+  }, [audioContext]);
 
   const triggerVibration = useCallback(() => {
     if ('vibrate' in navigator) {
