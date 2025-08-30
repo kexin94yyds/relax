@@ -100,7 +100,7 @@ const BreathingScreen: React.FC = () => {
         audioContext.close();
       }
     };
-  }, []);
+  }, [audioContext]);
 
   const triggerVibration = useCallback(() => {
     if ('vibrate' in navigator) {
