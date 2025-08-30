@@ -1,0 +1,15 @@
+{
+  "short_name": "放松APP",
+  "name": "放松APP - 呼吸练习",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2E8B57",
+  "background_color": "#ffffff"
+}
