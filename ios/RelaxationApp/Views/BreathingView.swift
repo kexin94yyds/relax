@@ -186,11 +186,12 @@ struct BreathingView: View {
                 }
             }
 
-            SmoothDurationSlider(
+            Slider(
                 value: $durationIndex,
-                range: 0...durationSliderMax,
-                isEnabled: !isActive && currentPhase == .ready
+                in: 0...durationSliderMax
             )
+            .tint(RelaxationTheme.ink)
+            .disabled(isActive || currentPhase != .ready)
 
             HStack(spacing: 0) {
                 ForEach(PracticeDurationOption.allCases) { option in
@@ -552,65 +553,6 @@ private struct ExerciseSnapshot {
     let cycle: Int
     let elapsed: Int
     let isFinished: Bool
-}
-
-private struct SmoothDurationSlider: View {
-    @Binding var value: Double
-
-    let range: ClosedRange<Double>
-    let isEnabled: Bool
-
-    var body: some View {
-        GeometryReader { proxy in
-            let width = max(proxy.size.width, 1)
-            let progress = sliderProgress
-            let thumbCenter = min(max(width * progress, 15), width - 15)
-
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(RelaxationTheme.hairline)
-                    .frame(height: 4)
-                    .position(x: width / 2, y: 18)
-
-                Capsule()
-                    .fill(RelaxationTheme.ink)
-                    .frame(width: max(0, thumbCenter), height: 4)
-                    .position(x: thumbCenter / 2, y: 18)
-
-                Circle()
-                    .fill(RelaxationTheme.ink)
-                    .frame(width: 30, height: 30)
-                    .overlay(
-                        Circle()
-                            .stroke(RelaxationTheme.paper, lineWidth: 3)
-                    )
-                    .overlay(
-                        Circle()
-                            .stroke(RelaxationTheme.ink.opacity(0.16), lineWidth: 1)
-                    )
-                    .position(x: thumbCenter, y: 18)
-            }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { gesture in
-                        guard isEnabled else { return }
-                        let clampedX = min(max(gesture.location.x, 0), width)
-                        let nextProgress = Double(clampedX / width)
-                        value = range.lowerBound + nextProgress * (range.upperBound - range.lowerBound)
-                    }
-            )
-            .opacity(isEnabled ? 1 : 0.55)
-        }
-        .frame(height: 36)
-    }
-
-    private var sliderProgress: CGFloat {
-        guard range.upperBound > range.lowerBound else { return 0 }
-
-        let clampedValue = min(max(value, range.lowerBound), range.upperBound)
-        return CGFloat((clampedValue - range.lowerBound) / (range.upperBound - range.lowerBound))
-    }
 }
 
 private struct InstructionRow: View {
