@@ -23,58 +23,56 @@ final class FeedbackService {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.prepare()
         generator.impactOccurred()
-        playTone(frequency: frequency(for: phase), duration: duration(for: phase), volume: 0.35)
+        playTone(frequency: frequency(for: phase), duration: duration(for: phase), startVolume: 0.15)
     }
 
-    func countdownTick() {
-        playTone(frequency: 1_100, duration: 0.08, volume: 0.22)
+    func countdownTick(count: Int) {
+        let frequency = 400 + Double(4 - count) * 200
+        playTone(frequency: frequency, duration: 0.1, startVolume: 0.1)
     }
 
     func finished() {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-        playTone(frequency: 660, duration: 0.12, volume: 0.3)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) {
-            self.playTone(frequency: 880, duration: 0.18, volume: 0.32)
-        }
+        playTone(frequency: frequency(for: .finished), duration: duration(for: .finished), startVolume: 0.15)
     }
 
     private func frequency(for phase: BreathingPhase) -> Double {
         switch phase {
         case .inhale:
-            return 520
+            return 600
         case .hold:
-            return 720
+            return 800
         case .exhale:
-            return 440
+            return 1_000
         case .ready:
             return 500
         case .finished:
-            return 660
+            return 400
         }
     }
 
     private func duration(for phase: BreathingPhase) -> Double {
         switch phase {
         case .inhale:
-            return 0.24
+            return 0.3
         case .hold:
-            return 0.18
-        case .exhale:
-            return 0.32
-        case .ready:
             return 0.2
+        case .exhale:
+            return 0.4
+        case .ready:
+            return 0.5
         case .finished:
-            return 0.18
+            return 0.8
         }
     }
 
-    private func playTone(frequency: Double, duration: Double, volume: Float) {
+    private func playTone(frequency: Double, duration: Double, startVolume: Float) {
         prepare()
         guard isPrepared else { return }
 
         do {
-            let player = try AVAudioPlayer(data: wavToneData(frequency: frequency, duration: duration, volume: volume))
+            let player = try AVAudioPlayer(data: wavToneData(frequency: frequency, duration: duration, startVolume: startVolume))
             player.prepareToPlay()
             player.play()
             activePlayers.append(player)
@@ -87,7 +85,7 @@ final class FeedbackService {
         }
     }
 
-    private func wavToneData(frequency: Double, duration: Double, volume: Float) -> Data {
+    private func wavToneData(frequency: Double, duration: Double, startVolume: Float) -> Data {
         let sampleRate = 44_100
         let channelCount = 1
         let bitsPerSample = 16
@@ -97,13 +95,14 @@ final class FeedbackService {
         let blockAlign = channelCount * bytesPerSample
 
         var sampleData = Data(capacity: frameCount * bytesPerSample)
+        let endVolume = Float(0.01)
+        let volumeRatio = max(Double(endVolume / startVolume), 0.001)
+
         for frame in 0..<frameCount {
             let progress = Double(frame) / Double(frameCount)
-            let fadeIn = min(progress / 0.12, 1)
-            let fadeOut = min((1 - progress) / 0.18, 1)
-            let envelope = min(fadeIn, fadeOut)
+            let envelope = Double(startVolume) * pow(volumeRatio, progress)
             let wave = sin(2 * Double.pi * frequency * Double(frame) / Double(sampleRate))
-            let clamped = max(-1, min(1, wave * Double(volume) * envelope))
+            let clamped = max(-1, min(1, wave * envelope))
             var sample = Int16(clamped * Double(Int16.max)).littleEndian
             sampleData.append(Data(bytes: &sample, count: MemoryLayout<Int16>.size))
         }

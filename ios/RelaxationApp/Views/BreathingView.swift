@@ -218,7 +218,7 @@ struct BreathingView: View {
         guard isActive else { return }
 
         if countdown <= 3 && countdown > 0 && soundEnabled {
-            feedback.countdownTick()
+            feedback.countdownTick(count: countdown)
         }
 
         guard countdown <= 1 else {
