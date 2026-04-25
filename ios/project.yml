@@ -1,0 +1,23 @@
+name: RelaxationApp
+options:
+  bundleIdPrefix: com.local
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+targets:
+  RelaxationApp:
+    type: application
+    platform: iOS
+    sources:
+      - path: RelaxationApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.relaxationapp
+        PRODUCT_NAME: RelaxationApp
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "放松APP"
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
