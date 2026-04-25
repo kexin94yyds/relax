@@ -4,48 +4,59 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(
-                    colors: [
-                        Color(red: 102 / 255, green: 126 / 255, blue: 234 / 255),
-                        Color(red: 118 / 255, green: 75 / 255, blue: 162 / 255)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
+                RelaxationTheme.paper
                 .ignoresSafeArea()
 
                 ScrollView {
-                    VStack(spacing: 24) {
-                        VStack(spacing: 8) {
-                            Text("选择放松方式")
-                                .font(.system(size: 34, weight: .bold, design: .rounded))
-                                .foregroundStyle(.white)
-                                .multilineTextAlignment(.center)
+                    VStack(alignment: .leading, spacing: 34) {
+                        VStack(alignment: .leading, spacing: 14) {
+                            Text("呼吸")
+                                .font(.system(size: 48, weight: .semibold))
+                                .foregroundStyle(RelaxationTheme.ink)
 
-                            Text("选择一个呼吸练习方法开始你的放松之旅")
-                                .font(.body)
-                                .foregroundStyle(.white.opacity(0.88))
-                                .multilineTextAlignment(.center)
+                            Text("放松练习")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(RelationTheme.secondaryInk)
+                                .textCase(.uppercase)
+
+                            Text("选择一个节奏，跟随提示完成一段安静的呼吸。")
+                                .font(.system(size: 16))
+                                .foregroundStyle(RelaxationTheme.secondaryInk)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        .padding(.top, 36)
+                        .padding(.top, 46)
 
-                        LazyVStack(spacing: 16) {
-                            ForEach(BreathingMethod.all) { method in
+                        VStack(spacing: 0) {
+                            ForEach(Array(BreathingMethod.all.enumerated()), id: \.element.id) { index, method in
                                 NavigationLink(value: method) {
-                                    MethodCardView(method: method)
+                                    MethodCardView(method: method, index: index + 1)
                                 }
                                 .buttonStyle(.plain)
+
+                                if method.id != BreathingMethod.all.last?.id {
+                                    Divider()
+                                        .overlay(RelaxationTheme.hairline)
+                                }
                             }
+                        }
+                        .overlay(alignment: .top) {
+                            Rectangle()
+                                .fill(RelaxationTheme.ink)
+                                .frame(height: 1)
+                        }
+                        .overlay(alignment: .bottom) {
+                            Rectangle()
+                                .fill(RelaxationTheme.ink)
+                                .frame(height: 1)
                         }
 
                         Text("找一个安静的地方，舒适地坐下，专注于你的呼吸")
-                            .font(.footnote)
-                            .foregroundStyle(.white.opacity(0.9))
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
+                            .font(.system(size: 13))
+                            .foregroundStyle(RelaxationTheme.mutedInk)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.bottom, 24)
                     }
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal, 22)
                 }
             }
             .navigationDestination(for: BreathingMethod.self) { method in
