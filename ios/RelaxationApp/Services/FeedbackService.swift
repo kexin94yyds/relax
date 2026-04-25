@@ -186,12 +186,7 @@ final class FeedbackService {
         guard isPrepared, backgroundPlayer == nil else { return }
 
         do {
-            let player = try AVAudioPlayer(data: wavToneData(
-                frequency: 110,
-                duration: 1,
-                startVolume: 0.003,
-                endVolume: 0.003
-            ))
+            let player = try AVAudioPlayer(data: silentWavData(duration: 1))
             player.numberOfLoops = -1
             player.prepareToPlay()
             player.play()
@@ -204,6 +199,34 @@ final class FeedbackService {
     private func stopBackgroundAudio() {
         backgroundPlayer?.stop()
         backgroundPlayer = nil
+    }
+
+    private func silentWavData(duration: Double) -> Data {
+        let sampleRate = 44_100
+        let channelCount = 1
+        let bitsPerSample = 16
+        let bytesPerSample = bitsPerSample / 8
+        let frameCount = max(1, Int(Double(sampleRate) * duration))
+        let byteRate = sampleRate * channelCount * bytesPerSample
+        let blockAlign = channelCount * bytesPerSample
+        let sampleData = Data(repeating: 0, count: frameCount * bytesPerSample)
+
+        var data = Data()
+        appendASCII("RIFF", to: &data)
+        appendUInt32(UInt32(36 + sampleData.count), to: &data)
+        appendASCII("WAVE", to: &data)
+        appendASCII("fmt ", to: &data)
+        appendUInt32(16, to: &data)
+        appendUInt16(1, to: &data)
+        appendUInt16(UInt16(channelCount), to: &data)
+        appendUInt32(UInt32(sampleRate), to: &data)
+        appendUInt32(UInt32(byteRate), to: &data)
+        appendUInt16(UInt16(blockAlign), to: &data)
+        appendUInt16(UInt16(bitsPerSample), to: &data)
+        appendASCII("data", to: &data)
+        appendUInt32(UInt32(sampleData.count), to: &data)
+        data.append(sampleData)
+        return data
     }
 
     private func wavToneData(frequency: Double, duration: Double, startVolume: Float, endVolume: Float) -> Data {
