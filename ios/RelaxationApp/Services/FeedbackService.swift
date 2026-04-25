@@ -6,6 +6,19 @@ final class FeedbackService {
     private var activePlayers: [AVAudioPlayer] = []
     private var isPrepared = false
 
+    func exerciseStarted(mode: SoundMode) {
+        guard mode != .silent else { return }
+
+        switch mode {
+        case .gentle:
+            playTone(frequency: 660, duration: 0.42, startVolume: 0.08, endVolume: 0.001)
+        case .classic:
+            playTone(frequency: 500, duration: 0.5, startVolume: 0.15)
+        case .silent:
+            break
+        }
+    }
+
     func prepare() {
         guard !isPrepared else { return }
 
@@ -19,25 +32,48 @@ final class FeedbackService {
         }
     }
 
-    func phaseChanged(phase: BreathingPhase) {
+    func phaseChanged(phase: BreathingPhase, mode: SoundMode) {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.prepare()
         generator.impactOccurred()
-        playTone(frequency: frequency(for: phase), duration: duration(for: phase), startVolume: 0.15)
+
+        switch mode {
+        case .gentle:
+            playTone(
+                frequency: gentleFrequency(for: phase),
+                duration: gentleDuration(for: phase),
+                startVolume: 0.055,
+                endVolume: 0.001
+            )
+        case .classic:
+            playTone(frequency: classicFrequency(for: phase), duration: classicDuration(for: phase), startVolume: 0.15)
+        case .silent:
+            break
+        }
     }
 
-    func countdownTick(count: Int) {
+    func countdownTick(count: Int, mode: SoundMode) {
+        guard mode == .classic else { return }
+
         let frequency = 400 + Double(4 - count) * 200
         playTone(frequency: frequency, duration: 0.1, startVolume: 0.1)
     }
 
-    func finished() {
+    func finished(mode: SoundMode) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-        playTone(frequency: frequency(for: .finished), duration: duration(for: .finished), startVolume: 0.15)
+
+        switch mode {
+        case .gentle:
+            playTone(frequency: 523.25, duration: 0.68, startVolume: 0.08, endVolume: 0.001)
+        case .classic:
+            playTone(frequency: classicFrequency(for: .finished), duration: classicDuration(for: .finished), startVolume: 0.15)
+        case .silent:
+            break
+        }
     }
 
-    private func frequency(for phase: BreathingPhase) -> Double {
+    private func classicFrequency(for phase: BreathingPhase) -> Double {
         switch phase {
         case .inhale:
             return 600
@@ -52,7 +88,7 @@ final class FeedbackService {
         }
     }
 
-    private func duration(for phase: BreathingPhase) -> Double {
+    private func classicDuration(for phase: BreathingPhase) -> Double {
         switch phase {
         case .inhale:
             return 0.3
@@ -67,12 +103,47 @@ final class FeedbackService {
         }
     }
 
-    private func playTone(frequency: Double, duration: Double, startVolume: Float) {
+    private func gentleFrequency(for phase: BreathingPhase) -> Double {
+        switch phase {
+        case .inhale:
+            return 523.25
+        case .hold:
+            return 659.25
+        case .exhale:
+            return 392
+        case .ready:
+            return 440
+        case .finished:
+            return 523.25
+        }
+    }
+
+    private func gentleDuration(for phase: BreathingPhase) -> Double {
+        switch phase {
+        case .inhale:
+            return 0.09
+        case .hold:
+            return 0.075
+        case .exhale:
+            return 0.12
+        case .ready:
+            return 0.18
+        case .finished:
+            return 0.68
+        }
+    }
+
+    private func playTone(frequency: Double, duration: Double, startVolume: Float, endVolume: Float = 0.01) {
         prepare()
         guard isPrepared else { return }
 
         do {
-            let player = try AVAudioPlayer(data: wavToneData(frequency: frequency, duration: duration, startVolume: startVolume))
+            let player = try AVAudioPlayer(data: wavToneData(
+                frequency: frequency,
+                duration: duration,
+                startVolume: startVolume,
+                endVolume: endVolume
+            ))
             player.prepareToPlay()
             player.play()
             activePlayers.append(player)
@@ -85,7 +156,7 @@ final class FeedbackService {
         }
     }
 
-    private func wavToneData(frequency: Double, duration: Double, startVolume: Float) -> Data {
+    private func wavToneData(frequency: Double, duration: Double, startVolume: Float, endVolume: Float) -> Data {
         let sampleRate = 44_100
         let channelCount = 1
         let bitsPerSample = 16
@@ -95,7 +166,6 @@ final class FeedbackService {
         let blockAlign = channelCount * bytesPerSample
 
         var sampleData = Data(capacity: frameCount * bytesPerSample)
-        let endVolume = Float(0.01)
         let volumeRatio = max(Double(endVolume / startVolume), 0.001)
 
         for frame in 0..<frameCount {
