@@ -8,9 +8,9 @@ enum SoundMode: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .gentle:
-            return "轻柔"
+            return "柔和"
         case .classic:
-            return "原版"
+            return "经典"
         case .silent:
             return "静音"
         }

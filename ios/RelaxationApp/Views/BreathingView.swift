@@ -16,19 +16,19 @@ struct BreathingView: View {
 
     var body: some View {
         ZStack {
-            method.color.opacity(0.08)
+            RelaxationTheme.paper
                 .ignoresSafeArea()
 
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 30) {
                     header
                     breathingCircle
                     progressSection
                     controls
                     instructions
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 32)
+                .padding(.horizontal, 22)
+                .padding(.bottom, 34)
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -36,21 +36,33 @@ struct BreathingView: View {
     }
 
     private var header: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: .center, spacing: 14) {
             Button {
                 dismiss()
             } label: {
-                Label("返回", systemImage: "chevron.left")
-                    .font(.subheadline.weight(.semibold))
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(RelaxationTheme.ink)
+                    .frame(width: 40, height: 40)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .stroke(RelaxationTheme.hairline, lineWidth: 1)
+                    )
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.plain)
 
             Spacer()
 
-            Text(method.name)
-                .font(.title3.weight(.bold))
-                .lineLimit(2)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 4) {
+                Text(method.name)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(RelaxationTheme.ink)
+                    .lineLimit(1)
+
+                Text(rhythmText)
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    .foregroundStyle(RelaxationTheme.mutedInk)
+            }
 
             Spacer()
 
@@ -58,10 +70,15 @@ struct BreathingView: View {
                 soundMode = soundMode == .silent ? .gentle : .silent
             } label: {
                 Image(systemName: soundMode == .silent ? "speaker.slash.fill" : "speaker.wave.2.fill")
-                    .frame(width: 22, height: 22)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(RelaxationTheme.ink)
+                    .frame(width: 40, height: 40)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .stroke(RelaxationTheme.hairline, lineWidth: 1)
+                    )
             }
-            .buttonStyle(.borderedProminent)
-            .tint(soundMode == .silent ? .gray : method.color)
+            .buttonStyle(.plain)
             .accessibilityLabel(soundMode == .silent ? "开启声音" : "关闭声音")
         }
         .padding(.top, 18)
@@ -70,85 +87,94 @@ struct BreathingView: View {
     private var breathingCircle: some View {
         ZStack {
             Circle()
-                .stroke(currentDisplayColor.opacity(0.24), lineWidth: 18)
-                .frame(width: 270, height: 270)
+                .stroke(RelaxationTheme.hairline, lineWidth: 1)
+                .frame(width: 284, height: 284)
+
+            Circle()
+                .stroke(RelaxationTheme.ink.opacity(0.1), lineWidth: 18)
+                .frame(width: 248, height: 248)
                 .scaleEffect(circleScale)
                 .animation(.easeInOut(duration: 1), value: currentPhase)
 
             Circle()
-                .stroke(currentDisplayColor, lineWidth: 4)
-                .frame(width: 270, height: 270)
+                .stroke(RelaxationTheme.ink, lineWidth: 2)
+                .frame(width: 248, height: 248)
                 .scaleEffect(circleScale)
                 .animation(.easeInOut(duration: 1), value: currentPhase)
 
-            VStack(spacing: 10) {
+            VStack(spacing: 12) {
                 Text(currentPhase.title)
-                    .font(.title2.weight(.bold))
-                    .foregroundStyle(currentDisplayColor)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(RelaxationTheme.ink)
 
                 Text("\(currentPhase == .finished ? 0 : countdown)")
-                    .font(.system(size: 64, weight: .bold, design: .rounded))
+                    .font(.system(size: 66, weight: .semibold, design: .monospaced))
                     .monospacedDigit()
-                    .foregroundStyle(Color.primary)
+                    .foregroundStyle(RelaxationTheme.ink)
 
                 Text("第 \(currentCycle) / \(method.cycles) 轮")
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(RelaxationTheme.secondaryInk)
             }
         }
-        .frame(height: 340)
+        .frame(height: 348)
     }
 
     private var progressSection: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 14) {
             Picker("声音模式", selection: $soundMode) {
                 ForEach(SoundMode.allCases) { mode in
                     Text(mode.title).tag(mode)
                 }
             }
             .pickerStyle(.segmented)
-            .padding(.bottom, 6)
+            .tint(RelaxationTheme.ink)
 
             ProgressView(value: progress)
-                .tint(method.color)
-                .scaleEffect(x: 1, y: 1.5, anchor: .center)
+                .tint(RelaxationTheme.ink)
+                .scaleEffect(x: 1, y: 1.2, anchor: .center)
 
             Text("\(Int((progress * 100).rounded()))% 完成")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .font(.system(size: 13, weight: .medium, design: .monospaced))
+                .foregroundStyle(RelaxationTheme.mutedInk)
                 .monospacedDigit()
         }
-        .padding(.horizontal, 4)
+        .padding(.horizontal, 2)
     }
 
     @ViewBuilder
     private var controls: some View {
         if !isActive && currentPhase == .ready {
-            Button("开始练习", action: startBreathing)
-                .buttonStyle(PrimaryActionButtonStyle(color: method.color))
+            Button("开始", action: startBreathing)
+                .buttonStyle(MonochromeButtonStyle(isFilled: true))
         } else if isActive && currentPhase != .finished {
-            Button("停止练习", action: stopBreathing)
-                .buttonStyle(PrimaryActionButtonStyle(color: .red))
+            Button("停止", action: stopBreathing)
+                .buttonStyle(MonochromeButtonStyle(isFilled: false))
         } else if currentPhase == .finished {
             VStack(spacing: 14) {
-                Text("练习完成！")
-                    .font(.title3.weight(.bold))
+                Text("练习完成")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(RelaxationTheme.ink)
 
                 Button("重新开始", action: startBreathing)
-                    .buttonStyle(PrimaryActionButtonStyle(color: method.color))
+                    .buttonStyle(MonochromeButtonStyle(isFilled: true))
 
                 Button("返回首页") {
                     dismiss()
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(MonochromeButtonStyle(isFilled: false))
             }
         }
     }
 
     private var instructions: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             Text("练习说明")
-                .font(.headline)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(RelaxationTheme.ink)
+
+            Divider()
+                .overlay(RelaxationTheme.hairline)
 
             if method.id == "6" {
                 InstructionRow(text: "找一个安静舒适的地方坐下")
@@ -167,11 +193,11 @@ struct BreathingView: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.background, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-    }
-
-    private var currentDisplayColor: Color {
-        currentPhase == .ready ? method.color : currentPhase.color
+        .background(RelaxationTheme.softFill, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(RelaxationTheme.hairline, lineWidth: 1)
+        )
     }
 
     private var circleScale: CGFloat {
@@ -277,6 +303,13 @@ struct BreathingView: View {
     private func playPhaseFeedback() {
         feedback.phaseChanged(phase: currentPhase, mode: soundMode)
     }
+
+    private var rhythmText: String {
+        if method.hold > 0 {
+            return "\(method.inhale) · \(method.hold) · \(method.exhale)"
+        }
+        return "\(method.inhale) · \(method.exhale)"
+    }
 }
 
 private struct InstructionRow: View {
@@ -284,25 +317,37 @@ private struct InstructionRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "checkmark.circle.fill")
-                .foregroundStyle(.green)
+            Rectangle()
+                .fill(RelaxationTheme.ink)
+                .frame(width: 5, height: 1)
+                .padding(.top, 10)
+
             Text(text)
+                .foregroundStyle(RelaxationTheme.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .font(.subheadline)
+        .font(.system(size: 14))
     }
 }
 
-private struct PrimaryActionButtonStyle: ButtonStyle {
-    let color: Color
+private struct MonochromeButtonStyle: ButtonStyle {
+    let isFilled: Bool
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline)
-            .foregroundStyle(.white)
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundStyle(isFilled ? RelaxationTheme.paper : RelaxationTheme.ink)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(color.opacity(configuration.isPressed ? 0.75 : 1), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .background(
+                (isFilled ? RelaxationTheme.ink : Color.clear)
+                    .opacity(configuration.isPressed ? 0.78 : 1),
+                in: RoundedRectangle(cornerRadius: 8, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(RelaxationTheme.ink, lineWidth: 1)
+            )
     }
 }
 
