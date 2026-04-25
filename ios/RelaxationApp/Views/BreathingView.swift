@@ -12,7 +12,7 @@ struct BreathingView: View {
     @State private var soundEnabled = true
     @State private var timer: Timer?
 
-    private let feedback = FeedbackService()
+    @State private var feedback = FeedbackService()
 
     var body: some View {
         ZStack {
@@ -185,6 +185,7 @@ struct BreathingView: View {
 
     private func startBreathing() {
         stopTimer()
+        feedback.prepare()
         isActive = true
         currentCycle = 1
         elapsed = 0
@@ -268,7 +269,7 @@ struct BreathingView: View {
 
     private func playPhaseFeedback() {
         if soundEnabled {
-            feedback.phaseChanged()
+            feedback.phaseChanged(phase: currentPhase)
         }
     }
 }
