@@ -175,7 +175,7 @@ struct BreathingView: View {
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 3) {
-                    Text(selectedDurationOption.title)
+                    Text(durationTitle)
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(RelaxationTheme.ink)
 
@@ -188,8 +188,7 @@ struct BreathingView: View {
 
             Slider(
                 value: $durationIndex,
-                in: 0...Double(PracticeDurationOption.allCases.count - 1),
-                step: 1
+                in: 0...durationSliderMax
             )
             .tint(RelaxationTheme.ink)
             .disabled(isActive || currentPhase != .ready)
@@ -290,14 +289,42 @@ struct BreathingView: View {
         return PracticeDurationOption.allCases[index]
     }
 
+    private var durationSliderMax: Double {
+        Double(PracticeDurationOption.allCases.count - 1)
+    }
+
+    private var durationTitle: String {
+        guard durationIndex > 0.05 else { return "默认" }
+
+        let minutes = max(1, Int((Double(plannedTargetSeconds) / 60).rounded()))
+        return "约 \(minutes) 分钟"
+    }
+
+    private var plannedTargetSeconds: Int {
+        guard durationIndex > 0.05 else { return method.totalDuration }
+
+        let lowerIndex = min(max(Int(durationIndex.rounded(.down)), 0), PracticeDurationOption.allCases.count - 1)
+        let upperIndex = min(lowerIndex + 1, PracticeDurationOption.allCases.count - 1)
+        let lowerOption = PracticeDurationOption.allCases[lowerIndex]
+        let upperOption = PracticeDurationOption.allCases[upperIndex]
+        let lowerSeconds = targetSeconds(for: lowerOption)
+        let upperSeconds = targetSeconds(for: upperOption)
+        let fraction = durationIndex - Double(lowerIndex)
+
+        return Int((Double(lowerSeconds) + Double(upperSeconds - lowerSeconds) * fraction).rounded())
+    }
+
     private var plannedCycles: Int {
         guard method.cycleDuration > 0 else { return method.cycles }
-        guard let targetSeconds = selectedDurationOption.targetSeconds else { return method.cycles }
-        return max(1, Int((Double(targetSeconds) / Double(method.cycleDuration)).rounded()))
+        return max(1, Int((Double(plannedTargetSeconds) / Double(method.cycleDuration)).rounded()))
     }
 
     private var plannedTotalDuration: Int {
         method.cycleDuration * plannedCycles
+    }
+
+    private func targetSeconds(for option: PracticeDurationOption) -> Int {
+        option.targetSeconds ?? method.totalDuration
     }
 
     private func startBreathing() {
