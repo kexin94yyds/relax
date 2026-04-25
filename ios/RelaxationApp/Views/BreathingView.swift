@@ -9,7 +9,7 @@ struct BreathingView: View {
     @State private var countdown = 0
     @State private var currentCycle = 0
     @State private var elapsed = 0
-    @State private var soundEnabled = true
+    @State private var soundMode: SoundMode = .gentle
     @State private var timer: Timer?
 
     @State private var feedback = FeedbackService()
@@ -55,14 +55,14 @@ struct BreathingView: View {
             Spacer()
 
             Button {
-                soundEnabled.toggle()
+                soundMode = soundMode == .silent ? .gentle : .silent
             } label: {
-                Image(systemName: soundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                Image(systemName: soundMode == .silent ? "speaker.slash.fill" : "speaker.wave.2.fill")
                     .frame(width: 22, height: 22)
             }
             .buttonStyle(.borderedProminent)
-            .tint(soundEnabled ? method.color : .gray)
-            .accessibilityLabel(soundEnabled ? "关闭声音" : "开启声音")
+            .tint(soundMode == .silent ? .gray : method.color)
+            .accessibilityLabel(soundMode == .silent ? "开启声音" : "关闭声音")
         }
         .padding(.top, 18)
     }
@@ -101,6 +101,14 @@ struct BreathingView: View {
 
     private var progressSection: some View {
         VStack(spacing: 10) {
+            Picker("声音模式", selection: $soundMode) {
+                ForEach(SoundMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.bottom, 6)
+
             ProgressView(value: progress)
                 .tint(method.color)
                 .scaleEffect(x: 1, y: 1.5, anchor: .center)
@@ -191,6 +199,7 @@ struct BreathingView: View {
         elapsed = 0
         currentPhase = .inhale
         countdown = method.inhale
+        feedback.exerciseStarted(mode: soundMode)
         playPhaseFeedback()
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
@@ -217,8 +226,8 @@ struct BreathingView: View {
     private func tick() {
         guard isActive else { return }
 
-        if countdown <= 3 && countdown > 0 && soundEnabled {
-            feedback.countdownTick(count: countdown)
+        if countdown <= 3 && countdown > 0 {
+            feedback.countdownTick(count: countdown, mode: soundMode)
         }
 
         guard countdown <= 1 else {
@@ -253,9 +262,7 @@ struct BreathingView: View {
                 countdown = 0
                 elapsed = method.totalDuration
                 stopTimer()
-                if soundEnabled {
-                    feedback.finished()
-                }
+                feedback.finished(mode: soundMode)
             } else {
                 currentCycle += 1
                 currentPhase = .inhale
@@ -268,9 +275,7 @@ struct BreathingView: View {
     }
 
     private func playPhaseFeedback() {
-        if soundEnabled {
-            feedback.phaseChanged(phase: currentPhase)
-        }
+        feedback.phaseChanged(phase: currentPhase, mode: soundMode)
     }
 }
 
