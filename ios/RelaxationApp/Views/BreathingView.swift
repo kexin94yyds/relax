@@ -529,23 +529,6 @@ private enum PracticeDurationOption: Int, CaseIterable, Identifiable {
         }
     }
 
-    var title: String {
-        switch self {
-        case .defaultPlan:
-            return "默认"
-        case .threeMinutes:
-            return "约 3 分钟"
-        case .fiveMinutes:
-            return "约 5 分钟"
-        case .tenMinutes:
-            return "约 10 分钟"
-        case .fifteenMinutes:
-            return "约 15 分钟"
-        case .twentyMinutes:
-            return "约 20 分钟"
-        }
-    }
-
     var tickLabel: String {
         switch self {
         case .defaultPlan:
