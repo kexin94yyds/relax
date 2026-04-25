@@ -114,6 +114,12 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					2E72D55C5052B968A7B3C7F0 = {
+						DevelopmentTeam = UM3Z9G5DNH;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 41BA3331C9F5AC7AA6D48611 /* Build configuration list for PBXProject "RelaxationApp" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -287,6 +293,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = UM3Z9G5DNH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "放松APP";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -306,6 +314,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = UM3Z9G5DNH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "放松APP";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
