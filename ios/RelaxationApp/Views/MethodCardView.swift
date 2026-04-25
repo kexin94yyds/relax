@@ -2,61 +2,57 @@ import SwiftUI
 
 struct MethodCardView: View {
     let method: BreathingMethod
+    let index: Int
 
     var body: some View {
-        HStack(spacing: 14) {
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .fill(method.color)
-                .frame(width: 5)
+        HStack(alignment: .top, spacing: 16) {
+            Text(String(format: "%02d", index))
+                .font(.system(size: 13, weight: .medium, design: .monospaced))
+                .foregroundStyle(RelaxationTheme.mutedInk)
+                .frame(width: 28, alignment: .leading)
 
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(alignment: .firstTextBaseline) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top, spacing: 12) {
                     Text(method.name)
-                        .font(.headline)
-                        .foregroundStyle(Color.primary)
+                        .font(.system(size: 19, weight: .semibold))
+                        .foregroundStyle(RelaxationTheme.ink)
                         .lineLimit(2)
 
                     Spacer(minLength: 12)
 
-                    Circle()
-                        .fill(method.color)
-                        .frame(width: 14, height: 14)
+                    Text(rhythmText)
+                        .font(.system(size: 15, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(RelaxationTheme.ink)
+                        .lineLimit(1)
                 }
 
                 Text(method.description)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 14))
+                    .foregroundStyle(RelaxationTheme.secondaryInk)
                     .fixedSize(horizontal: false, vertical: true)
 
-                FlowLayout(spacing: 8) {
-                    DetailPill(text: "吸气: \(method.inhale)秒")
-                    if method.hold > 0 {
-                        DetailPill(text: "保持: \(method.hold)秒")
-                    }
-                    DetailPill(text: "呼气: \(method.exhale)秒")
-                    DetailPill(text: "循环: \(method.cycles)次")
+                HStack(spacing: 12) {
+                    Text("\(method.cycles) 轮")
+                    Text("\(method.totalDuration / 60) 分 \(method.totalDuration % 60) 秒")
                 }
+                .font(.system(size: 12, weight: .medium, design: .monospaced))
+                .foregroundStyle(RelaxationTheme.mutedInk)
             }
 
             Image(systemName: "chevron.right")
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(RelaxationTheme.mutedInk)
+                .padding(.top, 4)
         }
-        .padding(18)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .padding(.vertical, 20)
+        .contentShape(Rectangle())
     }
-}
 
-private struct DetailPill: View {
-    let text: String
-
-    var body: some View {
-        Text(text)
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(Color(red: 51 / 255, green: 51 / 255, blue: 51 / 255))
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(Color(red: 248 / 255, green: 249 / 255, blue: 250 / 255), in: Capsule())
+    private var rhythmText: String {
+        if method.hold > 0 {
+            return "\(method.inhale) · \(method.hold) · \(method.exhale)"
+        }
+        return "\(method.inhale) · \(method.exhale)"
     }
 }
 
@@ -109,9 +105,11 @@ struct FlowLayout: Layout {
 }
 
 #Preview {
-    ZStack {
-        Color.indigo
-        MethodCardView(method: BreathingMethod.all[0])
-            .padding()
+    VStack {
+        MethodCardView(method: BreathingMethod.all[0], index: 1)
+        Divider()
+        MethodCardView(method: BreathingMethod.all[1], index: 2)
     }
+    .padding()
+    .background(RelaxationTheme.paper)
 }

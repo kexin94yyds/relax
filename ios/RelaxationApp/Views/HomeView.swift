@@ -16,7 +16,7 @@ struct HomeView: View {
 
                             Text("放松练习")
                                 .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(RelationTheme.secondaryInk)
+                                .foregroundStyle(RelaxationTheme.secondaryInk)
                                 .textCase(.uppercase)
 
                             Text("选择一个节奏，跟随提示完成一段安静的呼吸。")
