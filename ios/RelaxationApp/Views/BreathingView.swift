@@ -32,7 +32,10 @@ struct BreathingView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .onDisappear(perform: stopTimer)
+        .onDisappear {
+            stopTimer()
+            feedback.exerciseStopped()
+        }
         .onChange(of: soundMode) { newMode in
             feedback.exerciseModeChanged(mode: newMode, isActive: isActive)
         }
