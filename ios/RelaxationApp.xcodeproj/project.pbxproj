@@ -14,6 +14,7 @@
 		7A9824212557BC1D2CD33403 /* SoundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72C75180958234DFE6F93E /* SoundMode.swift */; };
 		8607E013B0AD224F9618DF87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 785084DC8F116786CF3B029C /* Assets.xcassets */; };
 		A689F08BB14AB0A406473E98 /* FeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8672DD74656C11E4AFF079 /* FeedbackService.swift */; };
+		D4604F2BDE6C775EC9C53470 /* RelaxationTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */; };
 		E2EB985DC61AAB2D5B7AFC68 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214F1C97BA7F8422CF229D67 /* HomeView.swift */; };
 		F9AAB00963909AB312462930 /* MethodCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */; };
 /* End PBXBuildFile section */
@@ -22,6 +23,7 @@
 		00D2461A90430C6101B32E67 /* RelaxationApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RelaxationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingPhase.swift; sourceTree = "<group>"; };
 		214F1C97BA7F8422CF229D67 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationTheme.swift; sourceTree = "<group>"; };
 		2E9936D699991D5B51238A1C /* BreathingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingView.swift; sourceTree = "<group>"; };
 		4A72C75180958234DFE6F93E /* SoundMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMode.swift; sourceTree = "<group>"; };
 		744002A7502609DB44B28D7A /* BreathingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingMethod.swift; sourceTree = "<group>"; };
@@ -46,6 +48,7 @@
 				2E9936D699991D5B51238A1C /* BreathingView.swift */,
 				214F1C97BA7F8422CF229D67 /* HomeView.swift */,
 				8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */,
+				2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				E2EB985DC61AAB2D5B7AFC68 /* HomeView.swift in Sources */,
 				F9AAB00963909AB312462930 /* MethodCardView.swift in Sources */,
 				2C1EEA09DBA2CD7C3EC1FAFC /* RelaxationAppApp.swift in Sources */,
+				D4604F2BDE6C775EC9C53470 /* RelaxationTheme.swift in Sources */,
 				7A9824212557BC1D2CD33403 /* SoundMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
