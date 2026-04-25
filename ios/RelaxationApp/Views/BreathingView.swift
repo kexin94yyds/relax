@@ -38,6 +38,9 @@ struct BreathingView: View {
         }
         .onChange(of: soundMode) { newMode in
             feedback.exerciseModeChanged(mode: newMode, isActive: isActive)
+            if isActive && newMode != .silent {
+                updateNowPlaying()
+            }
         }
     }
 
@@ -233,6 +236,7 @@ struct BreathingView: View {
         countdown = method.inhale
         feedback.exerciseStarted(mode: soundMode)
         playPhaseFeedback()
+        updateNowPlaying()
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             Task { @MainActor in
@@ -266,6 +270,7 @@ struct BreathingView: View {
         guard countdown <= 1 else {
             countdown -= 1
             elapsed += 1
+            updateNowPlaying()
             return
         }
 
@@ -284,10 +289,12 @@ struct BreathingView: View {
                 countdown = method.exhale
             }
             playPhaseFeedback()
+            updateNowPlaying()
         case .hold:
             currentPhase = .exhale
             countdown = method.exhale
             playPhaseFeedback()
+            updateNowPlaying()
         case .exhale:
             if currentCycle >= method.cycles {
                 currentPhase = .finished
@@ -304,6 +311,7 @@ struct BreathingView: View {
                 currentPhase = .inhale
                 countdown = method.inhale
                 playPhaseFeedback()
+                updateNowPlaying()
             }
         case .ready, .finished:
             break
@@ -312,6 +320,20 @@ struct BreathingView: View {
 
     private func playPhaseFeedback() {
         feedback.phaseChanged(phase: currentPhase, mode: soundMode)
+    }
+
+    private func updateNowPlaying() {
+        guard soundMode != .silent else { return }
+
+        feedback.updateNowPlaying(
+            methodName: method.name,
+            phase: currentPhase,
+            cycle: currentCycle,
+            totalCycles: method.cycles,
+            elapsed: elapsed,
+            totalDuration: method.totalDuration,
+            isActive: isActive
+        )
     }
 
     private var rhythmText: String {

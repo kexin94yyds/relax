@@ -1,10 +1,12 @@
 import AVFoundation
+import MediaPlayer
 import SwiftUI
 
 @MainActor
 final class FeedbackService {
     private var activePlayers: [AVAudioPlayer] = []
     private var backgroundPlayer: AVAudioPlayer?
+    private var remoteCommandsConfigured = false
     private var isPrepared = false
 
     func exerciseStarted(mode: SoundMode) {
@@ -27,6 +29,7 @@ final class FeedbackService {
 
         if mode == .silent {
             stopBackgroundAudio()
+            clearNowPlaying()
         } else {
             startBackgroundAudio()
         }
@@ -35,6 +38,7 @@ final class FeedbackService {
     func exerciseStopped() {
         stopBackgroundAudio()
         activePlayers.removeAll()
+        clearNowPlaying()
 
         do {
             try AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
@@ -55,6 +59,34 @@ final class FeedbackService {
         } catch {
             print("音频初始化失败: \(error)")
         }
+    }
+
+    func updateNowPlaying(
+        methodName: String,
+        phase: BreathingPhase,
+        cycle: Int,
+        totalCycles: Int,
+        elapsed: Int,
+        totalDuration: Int,
+        isActive: Bool
+    ) {
+        guard isActive else {
+            clearNowPlaying()
+            return
+        }
+
+        prepare()
+        configureRemoteCommands()
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [
+            MPMediaItemPropertyTitle: methodName,
+            MPMediaItemPropertyArtist: "\(phase.title) · 第 \(max(cycle, 1)) / \(totalCycles) 轮",
+            MPMediaItemPropertyAlbumTitle: "relax",
+            MPMediaItemPropertyPlaybackDuration: TimeInterval(totalDuration),
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: TimeInterval(elapsed),
+            MPNowPlayingInfoPropertyPlaybackRate: 1.0
+        ]
     }
 
     func phaseChanged(phase: BreathingPhase, mode: SoundMode) {
@@ -199,6 +231,24 @@ final class FeedbackService {
     private func stopBackgroundAudio() {
         backgroundPlayer?.stop()
         backgroundPlayer = nil
+    }
+
+    private func clearNowPlaying() {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        UIApplication.shared.endReceivingRemoteControlEvents()
+    }
+
+    private func configureRemoteCommands() {
+        guard !remoteCommandsConfigured else { return }
+
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.playCommand.isEnabled = false
+        commandCenter.pauseCommand.isEnabled = false
+        commandCenter.togglePlayPauseCommand.isEnabled = false
+        commandCenter.nextTrackCommand.isEnabled = false
+        commandCenter.previousTrackCommand.isEnabled = false
+        commandCenter.changePlaybackPositionCommand.isEnabled = false
+        remoteCommandsConfigured = true
     }
 
     private func silentWavData(duration: Double) -> Data {
