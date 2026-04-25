@@ -17,8 +17,6 @@ final class FeedbackService {
     }
 
     func exerciseStarted(mode: SoundMode) {
-        guard mode != .silent else { return }
-
         startBackgroundAudio()
 
         switch mode {
@@ -34,11 +32,10 @@ final class FeedbackService {
     func exerciseModeChanged(mode: SoundMode, isActive: Bool) {
         guard isActive else { return }
 
+        startBackgroundAudio()
+
         if mode == .silent {
-            stopBackgroundAudio()
             clearNowPlaying()
-        } else {
-            startBackgroundAudio()
         }
     }
 
@@ -258,7 +255,7 @@ final class FeedbackService {
         guard isPrepared, backgroundPlayer == nil else { return }
 
         do {
-            let player = try AVAudioPlayer(data: silentWavData(duration: 1))
+            let player = try AVAudioPlayer(data: keepAliveWavData(duration: 1))
             player.numberOfLoops = -1
             player.prepareToPlay()
             player.play()
@@ -297,7 +294,7 @@ final class FeedbackService {
         remoteCommandsConfigured = true
     }
 
-    private func silentWavData(duration: Double) -> Data {
+    private func keepAliveWavData(duration: Double) -> Data {
         let sampleRate = 44_100
         let channelCount = 1
         let bitsPerSample = 16
@@ -305,7 +302,15 @@ final class FeedbackService {
         let frameCount = max(1, Int(Double(sampleRate) * duration))
         let byteRate = sampleRate * channelCount * bytesPerSample
         let blockAlign = channelCount * bytesPerSample
-        let sampleData = Data(repeating: 0, count: frameCount * bytesPerSample)
+        let frequency = 18.0
+        let amplitude = 0.002
+
+        var sampleData = Data(capacity: frameCount * bytesPerSample)
+        for frame in 0..<frameCount {
+            let wave = sin(2 * Double.pi * frequency * Double(frame) / Double(sampleRate))
+            var sample = Int16(wave * amplitude * Double(Int16.max)).littleEndian
+            sampleData.append(Data(bytes: &sample, count: MemoryLayout<Int16>.size))
+        }
 
         var data = Data()
         appendASCII("RIFF", to: &data)
