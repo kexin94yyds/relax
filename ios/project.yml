@@ -15,6 +15,8 @@ targets:
       - path: RelaxationApp
     settings:
       base:
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: UM3Z9G5DNH
         PRODUCT_BUNDLE_IDENTIFIER: com.local.relaxationapp
         PRODUCT_NAME: RelaxationApp
         GENERATE_INFOPLIST_FILE: YES
