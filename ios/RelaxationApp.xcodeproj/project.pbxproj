@@ -26,6 +26,7 @@
 		2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationTheme.swift; sourceTree = "<group>"; };
 		2E9936D699991D5B51238A1C /* BreathingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingView.swift; sourceTree = "<group>"; };
 		4A72C75180958234DFE6F93E /* SoundMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMode.swift; sourceTree = "<group>"; };
+		565E4E73E7FD4D85998D7F8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		744002A7502609DB44B28D7A /* BreathingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingMethod.swift; sourceTree = "<group>"; };
 		785084DC8F116786CF3B029C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodCardView.swift; sourceTree = "<group>"; };
@@ -57,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				785084DC8F116786CF3B029C /* Assets.xcassets */,
+				565E4E73E7FD4D85998D7F8D /* Info.plist */,
 				BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */,
 				83390886B8182F4C66B687C3 /* Models */,
 				33D85439A7BE3AC9AD05CACD /* Services */,
@@ -303,10 +305,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UM3Z9G5DNH;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = relax;
-				INFOPLIST_KEY_UIBackgroundModes = audio;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_FILE = RelaxationApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -325,10 +324,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UM3Z9G5DNH;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = relax;
-				INFOPLIST_KEY_UIBackgroundModes = audio;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_FILE = RelaxationApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
