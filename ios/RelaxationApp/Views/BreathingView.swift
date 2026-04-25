@@ -4,6 +4,7 @@ struct BreathingView: View {
     let method: BreathingMethod
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @State private var isActive = false
     @State private var currentPhase: BreathingPhase = .ready
     @State private var countdown = 0
@@ -40,6 +41,13 @@ struct BreathingView: View {
             feedback.exerciseModeChanged(mode: newMode, isActive: isActive)
             if isActive && newMode != .silent {
                 updateNowPlaying()
+            }
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if isActive && (newPhase == .inactive || newPhase == .background) {
+                showExerciseNotification()
+            } else if newPhase == .active {
+                feedback.exerciseModeChanged(mode: soundMode, isActive: isActive)
             }
         }
     }
@@ -229,6 +237,7 @@ struct BreathingView: View {
     private func startBreathing() {
         stopTimer()
         feedback.prepare()
+        feedback.requestNotificationPermission()
         isActive = true
         currentCycle = 1
         elapsed = 0
@@ -333,6 +342,15 @@ struct BreathingView: View {
             elapsed: elapsed,
             totalDuration: method.totalDuration,
             isActive: isActive
+        )
+    }
+
+    private func showExerciseNotification() {
+        feedback.showExerciseNotification(
+            methodName: method.name,
+            phase: currentPhase,
+            cycle: currentCycle,
+            totalCycles: method.cycles
         )
     }
 

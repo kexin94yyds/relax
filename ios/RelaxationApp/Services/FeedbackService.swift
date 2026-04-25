@@ -1,9 +1,11 @@
 import AVFoundation
 import MediaPlayer
 import SwiftUI
+import UserNotifications
 
 @MainActor
 final class FeedbackService {
+    private let exerciseNotificationIdentifier = "relax.activeExercise"
     private var activePlayers: [AVAudioPlayer] = []
     private var backgroundPlayer: AVAudioPlayer?
     private var remoteCommandsConfigured = false
@@ -39,6 +41,7 @@ final class FeedbackService {
         stopBackgroundAudio()
         activePlayers.removeAll()
         clearNowPlaying()
+        clearExerciseNotification()
 
         do {
             try AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
@@ -87,6 +90,36 @@ final class FeedbackService {
             MPNowPlayingInfoPropertyElapsedPlaybackTime: TimeInterval(elapsed),
             MPNowPlayingInfoPropertyPlaybackRate: 1.0
         ]
+    }
+
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, error in
+            if let error {
+                print("通知权限请求失败: \(error)")
+            }
+        }
+    }
+
+    func showExerciseNotification(methodName: String, phase: BreathingPhase, cycle: Int, totalCycles: Int) {
+        let content = UNMutableNotificationContent()
+        content.title = "relax"
+        content.subtitle = methodName
+        content.body = "呼吸练习进行中 · \(phase.title) · 第 \(max(cycle, 1)) / \(totalCycles) 轮"
+        content.sound = nil
+
+        let request = UNNotificationRequest(
+            identifier: exerciseNotificationIdentifier,
+            content: content,
+            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        )
+
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [exerciseNotificationIdentifier])
+        center.add(request) { error in
+            if let error {
+                print("呼吸练习通知发送失败: \(error)")
+            }
+        }
     }
 
     func phaseChanged(phase: BreathingPhase, mode: SoundMode) {
@@ -236,6 +269,12 @@ final class FeedbackService {
     private func clearNowPlaying() {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
         UIApplication.shared.endReceivingRemoteControlEvents()
+    }
+
+    private func clearExerciseNotification() {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [exerciseNotificationIdentifier])
+        center.removeDeliveredNotifications(withIdentifiers: [exerciseNotificationIdentifier])
     }
 
     private func configureRemoteCommands() {
