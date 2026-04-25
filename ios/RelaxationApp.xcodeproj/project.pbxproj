@@ -1,0 +1,347 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2C1EEA09DBA2CD7C3EC1FAFC /* RelaxationAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */; };
+		4E7A20CF2D2C0A4DB2BA02CF /* BreathingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744002A7502609DB44B28D7A /* BreathingMethod.swift */; };
+		56EA7B84CAA01528009DAFA7 /* BreathingPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */; };
+		6CFF1E6D6849BC9417FADB8A /* BreathingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9936D699991D5B51238A1C /* BreathingView.swift */; };
+		8607E013B0AD224F9618DF87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 785084DC8F116786CF3B029C /* Assets.xcassets */; };
+		A689F08BB14AB0A406473E98 /* FeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8672DD74656C11E4AFF079 /* FeedbackService.swift */; };
+		E2EB985DC61AAB2D5B7AFC68 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214F1C97BA7F8422CF229D67 /* HomeView.swift */; };
+		F9AAB00963909AB312462930 /* MethodCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00D2461A90430C6101B32E67 /* RelaxationApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RelaxationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingPhase.swift; sourceTree = "<group>"; };
+		214F1C97BA7F8422CF229D67 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		2E9936D699991D5B51238A1C /* BreathingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingView.swift; sourceTree = "<group>"; };
+		744002A7502609DB44B28D7A /* BreathingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingMethod.swift; sourceTree = "<group>"; };
+		785084DC8F116786CF3B029C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodCardView.swift; sourceTree = "<group>"; };
+		BD8672DD74656C11E4AFF079 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
+		BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationAppApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		33D85439A7BE3AC9AD05CACD /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BD8672DD74656C11E4AFF079 /* FeedbackService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		67959CB668105934DD87CDB7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2E9936D699991D5B51238A1C /* BreathingView.swift */,
+				214F1C97BA7F8422CF229D67 /* HomeView.swift */,
+				8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6A9CDE29DC2366049C9DFB1D /* RelaxationApp */ = {
+			isa = PBXGroup;
+			children = (
+				785084DC8F116786CF3B029C /* Assets.xcassets */,
+				BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */,
+				83390886B8182F4C66B687C3 /* Models */,
+				33D85439A7BE3AC9AD05CACD /* Services */,
+				67959CB668105934DD87CDB7 /* Views */,
+			);
+			path = RelaxationApp;
+			sourceTree = "<group>";
+		};
+		6C8BC1501936B71F44ED2207 = {
+			isa = PBXGroup;
+			children = (
+				6A9CDE29DC2366049C9DFB1D /* RelaxationApp */,
+				7D5AFFA708E8B86A18779CD0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7D5AFFA708E8B86A18779CD0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00D2461A90430C6101B32E67 /* RelaxationApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		83390886B8182F4C66B687C3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				744002A7502609DB44B28D7A /* BreathingMethod.swift */,
+				1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2E72D55C5052B968A7B3C7F0 /* RelaxationApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A2DEE4F32D58E715FCE2055 /* Build configuration list for PBXNativeTarget "RelaxationApp" */;
+			buildPhases = (
+				D149C3C3736D36CC43EC1C45 /* Sources */,
+				D0129785A1D6F561813BBF78 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RelaxationApp;
+			packageProductDependencies = (
+			);
+			productName = RelaxationApp;
+			productReference = 00D2461A90430C6101B32E67 /* RelaxationApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8AAFB5DD4D952206FDE3EB9D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = 41BA3331C9F5AC7AA6D48611 /* Build configuration list for PBXProject "RelaxationApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6C8BC1501936B71F44ED2207;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2E72D55C5052B968A7B3C7F0 /* RelaxationApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D0129785A1D6F561813BBF78 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8607E013B0AD224F9618DF87 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D149C3C3736D36CC43EC1C45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E7A20CF2D2C0A4DB2BA02CF /* BreathingMethod.swift in Sources */,
+				56EA7B84CAA01528009DAFA7 /* BreathingPhase.swift in Sources */,
+				6CFF1E6D6849BC9417FADB8A /* BreathingView.swift in Sources */,
+				A689F08BB14AB0A406473E98 /* FeedbackService.swift in Sources */,
+				E2EB985DC61AAB2D5B7AFC68 /* HomeView.swift in Sources */,
+				F9AAB00963909AB312462930 /* MethodCardView.swift in Sources */,
+				2C1EEA09DBA2CD7C3EC1FAFC /* RelaxationAppApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1EC732ECB6769D99469E7479 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		424F628D11C72FB802B3C13D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		4436468E3FC5646F1CC7793E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "放松APP";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.relaxationapp;
+				PRODUCT_NAME = RelaxationApp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		606C0859B66C55A213A8E15A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "放松APP";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.relaxationapp;
+				PRODUCT_NAME = RelaxationApp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A2DEE4F32D58E715FCE2055 /* Build configuration list for PBXNativeTarget "RelaxationApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				606C0859B66C55A213A8E15A /* Debug */,
+				4436468E3FC5646F1CC7793E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		41BA3331C9F5AC7AA6D48611 /* Build configuration list for PBXProject "RelaxationApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1EC732ECB6769D99469E7479 /* Debug */,
+				424F628D11C72FB802B3C13D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8AAFB5DD4D952206FDE3EB9D /* Project object */;
+}
