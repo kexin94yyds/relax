@@ -6,10 +6,15 @@ import UserNotifications
 @MainActor
 final class FeedbackService {
     private let exerciseNotificationIdentifier = "relax.activeExercise"
+    private let notificationDelegate = ExerciseNotificationDelegate()
     private var activePlayers: [AVAudioPlayer] = []
     private var backgroundPlayer: AVAudioPlayer?
     private var remoteCommandsConfigured = false
     private var isPrepared = false
+
+    init() {
+        UNUserNotificationCenter.current().delegate = notificationDelegate
+    }
 
     func exerciseStarted(mode: SoundMode) {
         guard mode != .silent else { return }
@@ -93,7 +98,7 @@ final class FeedbackService {
     }
 
     func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .timeSensitive]) { _, error in
             if let error {
                 print("通知权限请求失败: \(error)")
             }
@@ -106,6 +111,8 @@ final class FeedbackService {
         content.subtitle = methodName
         content.body = "呼吸练习进行中 · \(phase.title) · 第 \(max(cycle, 1)) / \(totalCycles) 轮"
         content.sound = nil
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 1
 
         let request = UNNotificationRequest(
             identifier: exerciseNotificationIdentifier,
@@ -369,5 +376,15 @@ final class FeedbackService {
     private func appendUInt32(_ value: UInt32, to data: inout Data) {
         var littleEndian = value.littleEndian
         data.append(Data(bytes: &littleEndian, count: MemoryLayout<UInt32>.size))
+    }
+}
+
+private final class ExerciseNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .list])
     }
 }
