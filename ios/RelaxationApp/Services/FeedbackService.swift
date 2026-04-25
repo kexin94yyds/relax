@@ -4,10 +4,13 @@ import SwiftUI
 @MainActor
 final class FeedbackService {
     private var activePlayers: [AVAudioPlayer] = []
+    private var backgroundPlayer: AVAudioPlayer?
     private var isPrepared = false
 
     func exerciseStarted(mode: SoundMode) {
         guard mode != .silent else { return }
+
+        startBackgroundAudio()
 
         switch mode {
         case .gentle:
@@ -16,6 +19,28 @@ final class FeedbackService {
             playTone(frequency: 500, duration: 0.5, startVolume: 0.15)
         case .silent:
             break
+        }
+    }
+
+    func exerciseModeChanged(mode: SoundMode, isActive: Bool) {
+        guard isActive else { return }
+
+        if mode == .silent {
+            stopBackgroundAudio()
+        } else {
+            startBackgroundAudio()
+        }
+    }
+
+    func exerciseStopped() {
+        stopBackgroundAudio()
+        activePlayers.removeAll()
+
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
+            isPrepared = false
+        } catch {
+            print("音频释放失败: \(error)")
         }
     }
 
@@ -154,6 +179,31 @@ final class FeedbackService {
         } catch {
             print("播放提示音失败: \(error)")
         }
+    }
+
+    private func startBackgroundAudio() {
+        prepare()
+        guard isPrepared, backgroundPlayer == nil else { return }
+
+        do {
+            let player = try AVAudioPlayer(data: wavToneData(
+                frequency: 110,
+                duration: 1,
+                startVolume: 0.003,
+                endVolume: 0.003
+            ))
+            player.numberOfLoops = -1
+            player.prepareToPlay()
+            player.play()
+            backgroundPlayer = player
+        } catch {
+            print("后台音频保持失败: \(error)")
+        }
+    }
+
+    private func stopBackgroundAudio() {
+        backgroundPlayer?.stop()
+        backgroundPlayer = nil
     }
 
     private func wavToneData(frequency: Double, duration: Double, startVolume: Float, endVolume: Float) -> Data {

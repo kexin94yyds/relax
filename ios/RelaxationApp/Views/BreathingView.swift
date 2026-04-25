@@ -33,6 +33,9 @@ struct BreathingView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onDisappear(perform: stopTimer)
+        .onChange(of: soundMode) { newMode in
+            feedback.exerciseModeChanged(mode: newMode, isActive: isActive)
+        }
     }
 
     private var header: some View {
@@ -237,6 +240,7 @@ struct BreathingView: View {
 
     private func stopBreathing() {
         stopTimer()
+        feedback.exerciseStopped()
         isActive = false
         currentPhase = .ready
         countdown = 0
@@ -289,6 +293,9 @@ struct BreathingView: View {
                 elapsed = method.totalDuration
                 stopTimer()
                 feedback.finished(mode: soundMode)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    feedback.exerciseStopped()
+                }
             } else {
                 currentCycle += 1
                 currentPhase = .inhale
