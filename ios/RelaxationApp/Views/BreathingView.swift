@@ -11,6 +11,7 @@ struct BreathingView: View {
     @State private var currentCycle = 0
     @State private var elapsed = 0
     @State private var soundMode: SoundMode = .gentle
+    @State private var startedAt: Date?
     @State private var timer: Timer?
 
     @State private var feedback = FeedbackService()
@@ -45,8 +46,10 @@ struct BreathingView: View {
         }
         .onChange(of: scenePhase) { newPhase in
             if isActive && (newPhase == .inactive || newPhase == .background) {
+                syncProgressFromClock(playFeedback: false)
                 showExerciseNotification()
             } else if newPhase == .active {
+                syncProgressFromClock(playFeedback: false)
                 feedback.exerciseModeChanged(mode: soundMode, isActive: isActive)
             }
         }
@@ -239,6 +242,7 @@ struct BreathingView: View {
         feedback.prepare()
         feedback.requestNotificationPermission()
         isActive = true
+        startedAt = Date()
         currentCycle = 1
         elapsed = 0
         currentPhase = .inhale
@@ -249,7 +253,7 @@ struct BreathingView: View {
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             Task { @MainActor in
-                tick()
+                syncProgressFromClock(playFeedback: true)
             }
         }
     }
@@ -262,6 +266,7 @@ struct BreathingView: View {
         countdown = 0
         currentCycle = 0
         elapsed = 0
+        startedAt = nil
     }
 
     private func stopTimer() {
@@ -269,61 +274,91 @@ struct BreathingView: View {
         timer = nil
     }
 
-    private func tick() {
-        guard isActive else { return }
+    private func syncProgressFromClock(playFeedback: Bool) {
+        guard isActive, let startedAt else { return }
+
+        let realElapsed = min(max(Int(Date().timeIntervalSince(startedAt)), 0), method.totalDuration)
+        let previousPhase = currentPhase
+        let previousCycle = currentCycle
+        let snapshot = exerciseSnapshot(for: realElapsed)
+
+        if snapshot.isFinished {
+            finishBreathing()
+            return
+        }
+
+        currentPhase = snapshot.phase
+        countdown = snapshot.countdown
+        currentCycle = snapshot.cycle
+        elapsed = snapshot.elapsed
 
         if countdown <= 3 && countdown > 0 {
             feedback.countdownTick(count: countdown, mode: soundMode)
         }
 
-        guard countdown <= 1 else {
-            countdown -= 1
-            elapsed += 1
-            updateNowPlaying()
-            return
+        if playFeedback && (currentPhase != previousPhase || currentCycle != previousCycle) {
+            playPhaseFeedback()
         }
 
-        elapsed += 1
-        advancePhase()
+        updateNowPlaying()
     }
 
-    private func advancePhase() {
-        switch currentPhase {
-        case .inhale:
-            if method.hold > 0 {
-                currentPhase = .hold
-                countdown = method.hold
-            } else {
-                currentPhase = .exhale
-                countdown = method.exhale
-            }
-            playPhaseFeedback()
-            updateNowPlaying()
-        case .hold:
-            currentPhase = .exhale
-            countdown = method.exhale
-            playPhaseFeedback()
-            updateNowPlaying()
-        case .exhale:
-            if currentCycle >= method.cycles {
-                currentPhase = .finished
-                isActive = false
-                countdown = 0
-                elapsed = method.totalDuration
-                stopTimer()
-                feedback.finished(mode: soundMode)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    feedback.exerciseStopped()
-                }
-            } else {
-                currentCycle += 1
-                currentPhase = .inhale
-                countdown = method.inhale
-                playPhaseFeedback()
-                updateNowPlaying()
-            }
-        case .ready, .finished:
-            break
+    private func exerciseSnapshot(for realElapsed: Int) -> ExerciseSnapshot {
+        guard method.cycleDuration > 0, realElapsed < method.totalDuration else {
+            return ExerciseSnapshot(
+                phase: .finished,
+                countdown: 0,
+                cycle: method.cycles,
+                elapsed: method.totalDuration,
+                isFinished: true
+            )
+        }
+
+        let cycleIndex = realElapsed / method.cycleDuration
+        let cycleElapsed = realElapsed % method.cycleDuration
+        let cycle = min(cycleIndex + 1, method.cycles)
+
+        if cycleElapsed < method.inhale {
+            return ExerciseSnapshot(
+                phase: .inhale,
+                countdown: method.inhale - cycleElapsed,
+                cycle: cycle,
+                elapsed: realElapsed,
+                isFinished: false
+            )
+        }
+
+        let holdEnd = method.inhale + method.hold
+        if method.hold > 0 && cycleElapsed < holdEnd {
+            return ExerciseSnapshot(
+                phase: .hold,
+                countdown: holdEnd - cycleElapsed,
+                cycle: cycle,
+                elapsed: realElapsed,
+                isFinished: false
+            )
+        }
+
+        let exhaleElapsed = cycleElapsed - holdEnd
+        return ExerciseSnapshot(
+            phase: .exhale,
+            countdown: max(method.exhale - exhaleElapsed, 1),
+            cycle: cycle,
+            elapsed: realElapsed,
+            isFinished: false
+        )
+    }
+
+    private func finishBreathing() {
+        currentPhase = .finished
+        isActive = false
+        countdown = 0
+        elapsed = method.totalDuration
+        startedAt = nil
+        stopTimer()
+        feedback.finished(mode: soundMode)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            feedback.exerciseStopped()
         }
     }
 
@@ -360,6 +395,14 @@ struct BreathingView: View {
         }
         return "\(method.inhale) · \(method.exhale)"
     }
+}
+
+private struct ExerciseSnapshot {
+    let phase: BreathingPhase
+    let countdown: Int
+    let cycle: Int
+    let elapsed: Int
+    let isFinished: Bool
 }
 
 private struct InstructionRow: View {
