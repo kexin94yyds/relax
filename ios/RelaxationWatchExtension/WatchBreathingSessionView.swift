@@ -30,11 +30,11 @@ struct WatchBreathingSessionView: View {
                 controls
             }
             .padding(.horizontal, 10)
-            .padding(.top, 8)
+            .padding(.top, 4)
             .padding(.bottom, 8)
 
             backButton
-                .padding(.top, 8)
+                .padding(.top, 4)
                 .padding(.leading, 8)
         }
         .navigationBarBackButtonHidden(true)
@@ -120,7 +120,7 @@ struct WatchBreathingSessionView: View {
 
     private var header: some View {
         Text(BreathingExerciseMath.rhythmText(for: method))
-            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+            .font(.system(size: 12, weight: .semibold, design: .monospaced))
             .foregroundStyle(WatchTheme.secondary)
             .monospacedDigit()
     }
@@ -171,7 +171,7 @@ struct WatchBreathingSessionView: View {
                 HStack(spacing: 0) {
                     ForEach(WatchDurationOption.allCases) { option in
                         Text(option.tickLabel)
-                            .font(.system(size: 10, weight: .medium))
+                            .font(.system(size: 11, weight: option == durationOption ? .semibold : .medium))
                             .foregroundStyle(option == durationOption ? WatchTheme.foreground : WatchTheme.muted)
                             .frame(maxWidth: .infinity)
                     }
