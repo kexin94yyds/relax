@@ -265,20 +265,11 @@ struct BreathingView: View {
     }
 
     private var circleScale: CGFloat {
-        switch currentPhase {
-        case .inhale:
-            return 1.12
-        case .exhale:
-            return 0.82
-        default:
-            return 1
-        }
+        BreathingExerciseMath.circleScale(for: currentPhase)
     }
 
     private var progress: Double {
-        guard plannedTotalDuration > 0 else { return 0 }
-        if currentPhase == .finished { return 1 }
-        return min(Double(elapsed) / Double(plannedTotalDuration), 1)
+        BreathingExerciseMath.progress(elapsed: elapsed, totalDuration: plannedTotalDuration, currentPhase: currentPhase)
     }
 
     private var selectedDurationOption: PracticeDurationOption {
@@ -300,6 +291,10 @@ struct BreathingView: View {
         return "约 \(minutes) 分钟"
     }
 
+    private var practicePlan: PracticePlan {
+        BreathingExerciseMath.plan(for: method, targetSeconds: plannedTargetSeconds)
+    }
+
     private var plannedTargetSeconds: Int {
         guard durationIndex > 0.05 else { return method.totalDuration }
 
@@ -315,16 +310,15 @@ struct BreathingView: View {
     }
 
     private var plannedCycles: Int {
-        guard method.cycleDuration > 0 else { return method.cycles }
-        return max(1, Int((Double(plannedTargetSeconds) / Double(method.cycleDuration)).rounded()))
+        practicePlan.cycles
     }
 
     private var plannedTotalDuration: Int {
-        method.cycleDuration * plannedCycles
+        practicePlan.totalDuration
     }
 
     private func targetSeconds(for option: PracticeDurationOption) -> Int {
-        option.targetSeconds ?? method.totalDuration
+        BreathingExerciseMath.targetSeconds(for: option, fallback: method.totalDuration)
     }
 
     private func startBreathing() {
@@ -394,48 +388,11 @@ struct BreathingView: View {
     }
 
     private func exerciseSnapshot(for realElapsed: Int) -> ExerciseSnapshot {
-        guard method.cycleDuration > 0, realElapsed < plannedTotalDuration else {
-            return ExerciseSnapshot(
-                phase: .finished,
-                countdown: 0,
-                cycle: plannedCycles,
-                elapsed: plannedTotalDuration,
-                isFinished: true
-            )
-        }
-
-        let cycleIndex = realElapsed / method.cycleDuration
-        let cycleElapsed = realElapsed % method.cycleDuration
-        let cycle = min(cycleIndex + 1, plannedCycles)
-
-        if cycleElapsed < method.inhale {
-            return ExerciseSnapshot(
-                phase: .inhale,
-                countdown: method.inhale - cycleElapsed,
-                cycle: cycle,
-                elapsed: realElapsed,
-                isFinished: false
-            )
-        }
-
-        let holdEnd = method.inhale + method.hold
-        if method.hold > 0 && cycleElapsed < holdEnd {
-            return ExerciseSnapshot(
-                phase: .hold,
-                countdown: holdEnd - cycleElapsed,
-                cycle: cycle,
-                elapsed: realElapsed,
-                isFinished: false
-            )
-        }
-
-        let exhaleElapsed = cycleElapsed - holdEnd
-        return ExerciseSnapshot(
-            phase: .exhale,
-            countdown: max(method.exhale - exhaleElapsed, 1),
-            cycle: cycle,
-            elapsed: realElapsed,
-            isFinished: false
+        BreathingExerciseMath.snapshot(
+            for: realElapsed,
+            method: method,
+            totalCycles: plannedCycles,
+            totalDuration: plannedTotalDuration
         )
     }
 
@@ -480,79 +437,12 @@ struct BreathingView: View {
     }
 
     private func formattedDuration(_ seconds: Int) -> String {
-        let minutes = seconds / 60
-        let remainder = seconds % 60
-
-        if minutes == 0 {
-            return "\(remainder)秒"
-        }
-
-        if remainder == 0 {
-            return "\(minutes)分钟"
-        }
-
-        return "\(minutes)分\(remainder)秒"
+        BreathingExerciseMath.formattedDuration(seconds)
     }
 
     private var rhythmText: String {
-        if method.hold > 0 {
-            return "\(method.inhale) · \(method.hold) · \(method.exhale)"
-        }
-        return "\(method.inhale) · \(method.exhale)"
+        BreathingExerciseMath.rhythmText(for: method)
     }
-}
-
-private enum PracticeDurationOption: Int, CaseIterable, Identifiable {
-    case defaultPlan
-    case threeMinutes
-    case fiveMinutes
-    case tenMinutes
-    case fifteenMinutes
-    case twentyMinutes
-
-    var id: Int { rawValue }
-
-    var targetSeconds: Int? {
-        switch self {
-        case .defaultPlan:
-            return nil
-        case .threeMinutes:
-            return 3 * 60
-        case .fiveMinutes:
-            return 5 * 60
-        case .tenMinutes:
-            return 10 * 60
-        case .fifteenMinutes:
-            return 15 * 60
-        case .twentyMinutes:
-            return 20 * 60
-        }
-    }
-
-    var tickLabel: String {
-        switch self {
-        case .defaultPlan:
-            return "默认"
-        case .threeMinutes:
-            return "3"
-        case .fiveMinutes:
-            return "5"
-        case .tenMinutes:
-            return "10"
-        case .fifteenMinutes:
-            return "15"
-        case .twentyMinutes:
-            return "20"
-        }
-    }
-}
-
-private struct ExerciseSnapshot {
-    let phase: BreathingPhase
-    let countdown: Int
-    let cycle: Int
-    let elapsed: Int
-    let isFinished: Bool
 }
 
 private struct InstructionRow: View {
