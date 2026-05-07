@@ -17,7 +17,7 @@ struct WatchHomeView: View {
                     Text("relax")
                         .font(.system(size: 28, weight: .medium))
                         .foregroundStyle(WatchTheme.muted)
-                        .padding(.top, 4)
+                        .padding(.top, -2)
 
                     ForEach(BreathingMethod.all) { method in
                         NavigationLink(value: method) {
