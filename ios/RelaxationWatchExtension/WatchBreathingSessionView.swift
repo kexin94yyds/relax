@@ -177,7 +177,7 @@ struct WatchBreathingSessionView: View {
         elapsed = 0
         currentPhase = .inhale
         countdown = method.inhale
-        playHaptic(for: .start)
+        playHapticSequence([.start, .directionUp])
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             Task { @MainActor in
@@ -208,6 +208,7 @@ struct WatchBreathingSessionView: View {
         let realElapsed = min(max(Int(Date().timeIntervalSince(startedAt)), 0), plan.totalDuration)
         let previousPhase = currentPhase
         let previousCycle = currentCycle
+        let previousCountdown = countdown
         let snapshot = BreathingExerciseMath.snapshot(
             for: realElapsed,
             method: method,
@@ -227,6 +228,11 @@ struct WatchBreathingSessionView: View {
 
         if playHaptics && (currentPhase != previousPhase || currentCycle != previousCycle) {
             playPhaseHaptic()
+        } else if playHaptics,
+                  currentPhase != .ready,
+                  snapshot.countdown == 1,
+                  previousCountdown != 1 {
+            playHaptic(for: .click)
         }
     }
 
@@ -243,11 +249,11 @@ struct WatchBreathingSessionView: View {
     private func playPhaseHaptic() {
         switch currentPhase {
         case .inhale:
-            playHaptic(for: .directionUp)
+            playHapticSequence([.start, .directionUp])
         case .hold:
             playHaptic(for: .click)
         case .exhale:
-            playHaptic(for: .directionDown)
+            playHapticSequence([.directionDown, .click])
         case .finished:
             playHaptic(for: .success)
         case .ready:
@@ -257,6 +263,17 @@ struct WatchBreathingSessionView: View {
 
     private func playHaptic(for type: WKHapticType) {
         WKInterfaceDevice.current().play(type)
+    }
+
+    private func playHapticSequence(_ types: [WKHapticType], intervalNanoseconds: UInt64 = 160_000_000) {
+        Task { @MainActor in
+            for (index, type) in types.enumerated() {
+                if index > 0 {
+                    try? await Task.sleep(nanoseconds: intervalNanoseconds)
+                }
+                playHaptic(for: type)
+            }
+        }
     }
 }
 
