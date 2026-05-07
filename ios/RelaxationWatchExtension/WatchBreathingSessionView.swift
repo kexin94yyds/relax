@@ -53,6 +53,25 @@ struct WatchBreathingSessionView: View {
         BreathingExerciseMath.plan(for: method, targetSeconds: durationOption.seconds)
     }
 
+    private var durationSliderValue: Binding<Double> {
+        Binding(
+            get: {
+                Double(WatchDurationOption.allCases.firstIndex(of: durationOption) ?? 0)
+            },
+            set: { newValue in
+                let index = min(
+                    max(Int(newValue.rounded()), 0),
+                    WatchDurationOption.allCases.count - 1
+                )
+                durationOption = WatchDurationOption.allCases[index]
+            }
+        )
+    }
+
+    private var durationSliderMax: Double {
+        Double(WatchDurationOption.allCases.count - 1)
+    }
+
     private var backButton: some View {
         Button {
             dismiss()
@@ -122,16 +141,27 @@ struct WatchBreathingSessionView: View {
                 .foregroundStyle(WatchTheme.secondary)
                 .monospacedDigit()
 
-            ProgressView(value: BreathingExerciseMath.progress(elapsed: elapsed, totalDuration: plan.totalDuration, currentPhase: currentPhase))
-                .tint(WatchTheme.foreground)
-                .scaleEffect(x: 1, y: 1.15, anchor: .center)
-
             if !isActive && currentPhase == .ready {
-                Button(durationOption.title) {
-                    durationOption = durationOption.next
+                Slider(
+                    value: durationSliderValue,
+                    in: 0...durationSliderMax,
+                    step: 1
+                )
+                .tint(WatchTheme.foreground)
+
+                HStack(spacing: 0) {
+                    ForEach(WatchDurationOption.allCases) { option in
+                        Text(option.tickLabel)
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(option == durationOption ? WatchTheme.foreground : WatchTheme.muted)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
-                .buttonStyle(WatchSecondaryButtonStyle())
             } else {
+                ProgressView(value: BreathingExerciseMath.progress(elapsed: elapsed, totalDuration: plan.totalDuration, currentPhase: currentPhase))
+                    .tint(WatchTheme.foreground)
+                    .scaleEffect(x: 1, y: 1.15, anchor: .center)
+
                 Text(BreathingExerciseMath.formattedDuration(plan.totalDuration))
                     .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .foregroundStyle(WatchTheme.muted)
@@ -295,6 +325,17 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
             return "3 分钟"
         case .fiveMinutes:
             return "5 分钟"
+        }
+    }
+
+    var tickLabel: String {
+        switch self {
+        case .oneMinute:
+            return "1"
+        case .threeMinutes:
+            return "3"
+        case .fiveMinutes:
+            return "5"
         }
     }
 
