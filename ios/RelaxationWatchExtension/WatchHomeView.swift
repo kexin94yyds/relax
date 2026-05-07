@@ -15,7 +15,7 @@ struct WatchHomeView: View {
                 .listStyle(.carousel)
                 .scrollContentBackground(.hidden)
                 .background(WatchTheme.background)
-                .padding(.top, 76)
+                .padding(.top, 58)
 
                 Text("relax")
                     .font(.system(size: 13, weight: .semibold))
