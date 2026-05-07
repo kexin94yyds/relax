@@ -12,22 +12,25 @@ struct WatchHomeView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("relax")
-                        .font(.system(size: 28, weight: .medium))
-                        .foregroundStyle(WatchTheme.muted)
-                        .padding(.top, 4)
+            VStack(alignment: .leading, spacing: 0) {
+                Text("relax")
+                    .font(.system(size: 28, weight: .medium))
+                    .foregroundStyle(WatchTheme.muted)
+                    .padding(.horizontal, 12)
+                    .frame(height: 40, alignment: .leading)
 
-                    ForEach(BreathingMethod.all) { method in
-                        NavigationLink(value: method) {
-                            WatchMethodRow(method: method)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(BreathingMethod.all) { method in
+                            NavigationLink(value: method) {
+                                WatchMethodRow(method: method)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 12)
                 }
-                .padding(.horizontal, 12)
-                .padding(.bottom, 12)
             }
             .background(WatchTheme.background)
             .navigationDestination(for: BreathingMethod.self) { method in
