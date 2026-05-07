@@ -3,30 +3,19 @@ import SwiftUI
 struct WatchHomeView: View {
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .topLeading) {
-                List(BreathingMethod.all) { method in
-                    NavigationLink {
-                        WatchBreathingSessionView(method: method)
-                    } label: {
-                        WatchMethodRow(method: method)
-                    }
-                    .listRowBackground(WatchTheme.background)
+            List(BreathingMethod.all) { method in
+                NavigationLink {
+                    WatchBreathingSessionView(method: method)
+                } label: {
+                    WatchMethodRow(method: method)
                 }
-                .listStyle(.carousel)
-                .scrollContentBackground(.hidden)
-                .background(WatchTheme.background)
-                .padding(.top, 58)
-
-                Text("relax")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(WatchTheme.secondary)
-                    .padding(.top, 18)
-                    .padding(.leading, 30)
-                    .accessibilityAddTraits(.isHeader)
+                .listRowBackground(WatchTheme.background)
             }
-            .ignoresSafeArea(.container, edges: .top)
+            .listStyle(.carousel)
+            .scrollContentBackground(.hidden)
             .background(WatchTheme.background)
-            .toolbar(.hidden, for: .navigationBar)
+            .navigationTitle("relax")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .tint(WatchTheme.foreground)
         .background(WatchTheme.background)
