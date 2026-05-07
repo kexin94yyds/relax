@@ -16,7 +16,7 @@ struct WatchBreathingSessionView: View {
     @State private var timer: Timer?
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             WatchTheme.background
                 .ignoresSafeArea()
 
@@ -30,13 +30,12 @@ struct WatchBreathingSessionView: View {
                 controls
             }
             .padding(.horizontal, 10)
-            .padding(.top, 4)
+            .padding(.top, 8)
             .padding(.bottom, 8)
-        }
-        .overlay(alignment: .topLeading) {
+
             backButton
-                .padding(.top, 4)
-                .padding(.leading, 2)
+                .padding(.top, 8)
+                .padding(.leading, 8)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -50,43 +49,80 @@ struct WatchBreathingSessionView: View {
         }
     }
 
+    private var durationDragControl: some View {
+        GeometryReader { proxy in
+            let width = max(proxy.size.width, 1)
+            let thumbDiameter: CGFloat = 14
+            let thumbOffset = durationSelectionProgress * max(width - thumbDiameter, 0)
+            let fillWidth = max(thumbDiameter, thumbOffset + thumbDiameter)
+
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(WatchTheme.softFill)
+                    .frame(height: 6)
+
+                Capsule()
+                    .fill(WatchTheme.foreground.opacity(0.9))
+                    .frame(width: min(fillWidth, width), height: 6)
+
+                Circle()
+                    .fill(WatchTheme.foreground)
+                    .frame(width: thumbDiameter, height: thumbDiameter)
+                    .offset(x: thumbOffset)
+            }
+            .frame(height: 18)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        updateDurationOption(locationX: value.location.x, width: width, thumbDiameter: thumbDiameter)
+                    }
+            )
+        }
+        .frame(height: 18)
+    }
+
     private var plan: PracticePlan {
         BreathingExerciseMath.plan(for: method, targetSeconds: durationOption.seconds)
+    }
+
+    private var durationSelectionIndex: Int {
+        WatchDurationOption.allCases.firstIndex(of: durationOption) ?? 0
+    }
+
+    private var durationSelectionProgress: CGFloat {
+        guard WatchDurationOption.allCases.count > 1 else { return 0 }
+        return CGFloat(durationSelectionIndex) / CGFloat(WatchDurationOption.allCases.count - 1)
     }
 
     private var backButton: some View {
         Button {
             dismiss()
         } label: {
-            Image(systemName: "chevron.left")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(WatchTheme.foreground)
-                .frame(width: 30, height: 30)
-                .background(
-                    Circle()
-                        .fill(WatchTheme.softFill)
-                )
-                .overlay(
-                    Circle()
-                        .stroke(WatchTheme.hairline, lineWidth: 1)
-                )
+            ZStack {
+                Circle()
+                    .fill(WatchTheme.softFill)
+                    .frame(width: 30, height: 30)
+
+                Circle()
+                    .stroke(WatchTheme.hairline, lineWidth: 1)
+                    .frame(width: 30, height: 30)
+
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(WatchTheme.foreground)
+            }
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
 
     private var header: some View {
-        VStack(spacing: 2) {
-            Text(method.name)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(WatchTheme.foreground)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-
-            Text(BreathingExerciseMath.rhythmText(for: method))
-                .font(.system(size: 10, weight: .medium, design: .monospaced))
-                .foregroundStyle(WatchTheme.secondary)
-                .monospacedDigit()
-        }
+        Text(BreathingExerciseMath.rhythmText(for: method))
+            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+            .foregroundStyle(WatchTheme.secondary)
+            .monospacedDigit()
     }
 
     private var breathingCircle: some View {
@@ -128,16 +164,23 @@ struct WatchBreathingSessionView: View {
                 .foregroundStyle(WatchTheme.secondary)
                 .monospacedDigit()
 
-            ProgressView(value: BreathingExerciseMath.progress(elapsed: elapsed, totalDuration: plan.totalDuration, currentPhase: currentPhase))
-                .tint(WatchTheme.foreground)
-                .scaleEffect(x: 1, y: 1.15, anchor: .center)
-
             if !isActive && currentPhase == .ready {
-                Button(durationOption.title) {
-                    durationOption = durationOption.next
+                durationDragControl
+                    .padding(.horizontal, 10)
+
+                HStack(spacing: 0) {
+                    ForEach(WatchDurationOption.allCases) { option in
+                        Text(option.tickLabel)
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(option == durationOption ? WatchTheme.foreground : WatchTheme.muted)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
-                .buttonStyle(WatchSecondaryButtonStyle())
             } else {
+                ProgressView(value: BreathingExerciseMath.progress(elapsed: elapsed, totalDuration: plan.totalDuration, currentPhase: currentPhase))
+                    .tint(WatchTheme.foreground)
+                    .scaleEffect(x: 1, y: 1.15, anchor: .center)
+
                 Text(BreathingExerciseMath.formattedDuration(plan.totalDuration))
                     .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .foregroundStyle(WatchTheme.muted)
@@ -175,7 +218,7 @@ struct WatchBreathingSessionView: View {
         elapsed = 0
         currentPhase = .inhale
         countdown = method.inhale
-        playHaptic(for: .start)
+        playHapticSequence([.start, .directionUp])
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             Task { @MainActor in
@@ -206,6 +249,7 @@ struct WatchBreathingSessionView: View {
         let realElapsed = min(max(Int(Date().timeIntervalSince(startedAt)), 0), plan.totalDuration)
         let previousPhase = currentPhase
         let previousCycle = currentCycle
+        let previousCountdown = countdown
         let snapshot = BreathingExerciseMath.snapshot(
             for: realElapsed,
             method: method,
@@ -225,6 +269,11 @@ struct WatchBreathingSessionView: View {
 
         if playHaptics && (currentPhase != previousPhase || currentCycle != previousCycle) {
             playPhaseHaptic()
+        } else if playHaptics,
+                  currentPhase != .ready,
+                  snapshot.countdown == 1,
+                  previousCountdown != 1 {
+            playHaptic(for: .click)
         }
     }
 
@@ -241,11 +290,11 @@ struct WatchBreathingSessionView: View {
     private func playPhaseHaptic() {
         switch currentPhase {
         case .inhale:
-            playHaptic(for: .directionUp)
+            playHapticSequence([.start, .directionUp])
         case .hold:
             playHaptic(for: .click)
         case .exhale:
-            playHaptic(for: .directionDown)
+            playHapticSequence([.directionDown, .click])
         case .finished:
             playHaptic(for: .success)
         case .ready:
@@ -255,6 +304,28 @@ struct WatchBreathingSessionView: View {
 
     private func playHaptic(for type: WKHapticType) {
         WKInterfaceDevice.current().play(type)
+    }
+
+    private func updateDurationOption(locationX: CGFloat, width: CGFloat, thumbDiameter: CGFloat) {
+        let availableWidth = max(width - thumbDiameter, 1)
+        let clampedX = min(max(locationX - (thumbDiameter / 2), 0), availableWidth)
+        let rawIndex = (clampedX / availableWidth) * CGFloat(WatchDurationOption.allCases.count - 1)
+        let index = min(
+            max(Int(rawIndex.rounded()), 0),
+            WatchDurationOption.allCases.count - 1
+        )
+        durationOption = WatchDurationOption.allCases[index]
+    }
+
+    private func playHapticSequence(_ types: [WKHapticType], intervalNanoseconds: UInt64 = 160_000_000) {
+        Task { @MainActor in
+            for (index, type) in types.enumerated() {
+                if index > 0 {
+                    try? await Task.sleep(nanoseconds: intervalNanoseconds)
+                }
+                playHaptic(for: type)
+            }
+        }
     }
 }
 
@@ -284,6 +355,17 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
             return "3 分钟"
         case .fiveMinutes:
             return "5 分钟"
+        }
+    }
+
+    var tickLabel: String {
+        switch self {
+        case .oneMinute:
+            return "1"
+        case .threeMinutes:
+            return "3"
+        case .fiveMinutes:
+            return "5"
         }
     }
 
