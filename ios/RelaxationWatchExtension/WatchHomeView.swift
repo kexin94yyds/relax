@@ -18,7 +18,7 @@ struct WatchHomeView: View {
                 .padding(.top, 58)
 
                 Text("relax")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(WatchTheme.secondary)
                     .padding(.top, 18)
                     .padding(.leading, 30)
