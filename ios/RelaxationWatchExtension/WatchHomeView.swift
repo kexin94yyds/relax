@@ -12,16 +12,9 @@ struct WatchHomeView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    Text("relax")
-                        .font(.system(size: 28, weight: .medium))
-                        .foregroundStyle(WatchTheme.muted)
-
-                    Spacer()
-                }
-                .padding(.horizontal, 12)
-                .frame(height: 34)
+            ZStack(alignment: .topLeading) {
+                WatchTheme.background
+                    .ignoresSafeArea()
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
@@ -33,11 +26,16 @@ struct WatchHomeView: View {
                         }
                     }
                     .padding(.horizontal, 12)
-                    .padding(.top, 10)
+                    .padding(.top, 42)
                     .padding(.bottom, 12)
                 }
+
+                Text("relax")
+                    .font(.system(size: 28, weight: .medium))
+                    .foregroundStyle(WatchTheme.muted)
+                    .padding(.top, 4)
+                    .padding(.leading, 12)
             }
-            .background(WatchTheme.background)
             .navigationDestination(for: BreathingMethod.self) { method in
                 WatchBreathingSessionView(method: method)
             }
