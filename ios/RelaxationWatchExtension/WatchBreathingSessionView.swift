@@ -16,18 +16,26 @@ struct WatchBreathingSessionView: View {
     @State private var timer: Timer?
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 10) {
+        ZStack {
+            WatchTheme.background
+                .ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                topBar
+                Spacer(minLength: 4)
                 header
+                Spacer(minLength: 8)
                 breathingCircle
+                Spacer(minLength: 8)
                 status
+                Spacer(minLength: 10)
                 controls
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 10)
+            .padding(.horizontal, 10)
+            .padding(.top, 6)
+            .padding(.bottom, 10)
         }
-        .scrollIndicators(.hidden)
-        .background(WatchTheme.background)
+        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             stopTimer()
@@ -43,10 +51,35 @@ struct WatchBreathingSessionView: View {
         BreathingExerciseMath.plan(for: method, targetSeconds: durationOption.seconds)
     }
 
+    private var topBar: some View {
+        HStack {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(WatchTheme.foreground)
+                    .frame(width: 34, height: 34)
+                    .background(
+                        Circle()
+                            .fill(WatchTheme.softFill)
+                    )
+                    .overlay(
+                        Circle()
+                            .stroke(WatchTheme.hairline, lineWidth: 1)
+                    )
+            }
+            .buttonStyle(.plain)
+
+            Spacer()
+        }
+        .frame(height: 34)
+    }
+
     private var header: some View {
         VStack(spacing: 2) {
             Text(method.name)
-                .font(.system(size: 15, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(WatchTheme.foreground)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
@@ -62,17 +95,17 @@ struct WatchBreathingSessionView: View {
         ZStack {
             Circle()
                 .stroke(WatchTheme.hairline, lineWidth: 1)
-                .frame(width: 104, height: 104)
+                .frame(width: 108, height: 108)
 
             Circle()
                 .stroke(WatchTheme.foreground.opacity(0.14), lineWidth: 12)
-                .frame(width: 86, height: 86)
+                .frame(width: 90, height: 90)
                 .scaleEffect(BreathingExerciseMath.circleScale(for: currentPhase))
                 .animation(.easeInOut(duration: 1), value: currentPhase)
 
             Circle()
                 .stroke(WatchTheme.foreground, lineWidth: 1.5)
-                .frame(width: 86, height: 86)
+                .frame(width: 90, height: 90)
                 .scaleEffect(BreathingExerciseMath.circleScale(for: currentPhase))
                 .animation(.easeInOut(duration: 1), value: currentPhase)
 
@@ -87,8 +120,7 @@ struct WatchBreathingSessionView: View {
                     .foregroundStyle(WatchTheme.foreground)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 2)
+        .frame(maxWidth: .infinity, minHeight: 116)
     }
 
     private var status: some View {
@@ -100,6 +132,7 @@ struct WatchBreathingSessionView: View {
 
             ProgressView(value: BreathingExerciseMath.progress(elapsed: elapsed, totalDuration: plan.totalDuration, currentPhase: currentPhase))
                 .tint(WatchTheme.foreground)
+                .scaleEffect(x: 1, y: 1.15, anchor: .center)
 
             if !isActive && currentPhase == .ready {
                 Button(durationOption.title) {
@@ -274,10 +307,10 @@ private struct WatchPrimaryButtonStyle: ButtonStyle {
             .font(.system(size: 14, weight: .semibold))
             .foregroundStyle(WatchTheme.background)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+            .padding(.vertical, 9)
             .background(
                 WatchTheme.foreground.opacity(configuration.isPressed ? 0.78 : 1),
-                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+                in: RoundedRectangle(cornerRadius: 20, style: .continuous)
             )
     }
 }
@@ -288,13 +321,13 @@ private struct WatchSecondaryButtonStyle: ButtonStyle {
             .font(.system(size: 13, weight: .semibold))
             .foregroundStyle(WatchTheme.foreground)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+            .padding(.vertical, 9)
             .background(
                 WatchTheme.softFill.opacity(configuration.isPressed ? 0.72 : 1),
-                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+                in: RoundedRectangle(cornerRadius: 20, style: .continuous)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .stroke(WatchTheme.hairline, lineWidth: 1)
             )
     }
