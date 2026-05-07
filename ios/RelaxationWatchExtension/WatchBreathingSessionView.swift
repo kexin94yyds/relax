@@ -49,27 +49,50 @@ struct WatchBreathingSessionView: View {
         }
     }
 
+    private var durationDragControl: some View {
+        GeometryReader { proxy in
+            let width = max(proxy.size.width, 1)
+            let thumbDiameter: CGFloat = 14
+            let thumbOffset = durationSelectionProgress * max(width - thumbDiameter, 0)
+            let fillWidth = max(thumbDiameter, thumbOffset + thumbDiameter)
+
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(WatchTheme.softFill)
+                    .frame(height: 6)
+
+                Capsule()
+                    .fill(WatchTheme.foreground.opacity(0.9))
+                    .frame(width: min(fillWidth, width), height: 6)
+
+                Circle()
+                    .fill(WatchTheme.foreground)
+                    .frame(width: thumbDiameter, height: thumbDiameter)
+                    .offset(x: thumbOffset)
+            }
+            .frame(height: 18)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        updateDurationOption(locationX: value.location.x, width: width, thumbDiameter: thumbDiameter)
+                    }
+            )
+        }
+        .frame(height: 18)
+    }
+
     private var plan: PracticePlan {
         BreathingExerciseMath.plan(for: method, targetSeconds: durationOption.seconds)
     }
 
-    private var durationSliderValue: Binding<Double> {
-        Binding(
-            get: {
-                Double(WatchDurationOption.allCases.firstIndex(of: durationOption) ?? 0)
-            },
-            set: { newValue in
-                let index = min(
-                    max(Int(newValue.rounded()), 0),
-                    WatchDurationOption.allCases.count - 1
-                )
-                durationOption = WatchDurationOption.allCases[index]
-            }
-        )
+    private var durationSelectionIndex: Int {
+        WatchDurationOption.allCases.firstIndex(of: durationOption) ?? 0
     }
 
-    private var durationSliderMax: Double {
-        Double(WatchDurationOption.allCases.count - 1)
+    private var durationSelectionProgress: CGFloat {
+        guard WatchDurationOption.allCases.count > 1 else { return 0 }
+        return CGFloat(durationSelectionIndex) / CGFloat(WatchDurationOption.allCases.count - 1)
     }
 
     private var backButton: some View {
@@ -142,12 +165,8 @@ struct WatchBreathingSessionView: View {
                 .monospacedDigit()
 
             if !isActive && currentPhase == .ready {
-                Slider(
-                    value: durationSliderValue,
-                    in: 0...durationSliderMax,
-                    step: 1
-                )
-                .tint(WatchTheme.foreground)
+                durationDragControl
+                    .padding(.horizontal, 10)
 
                 HStack(spacing: 0) {
                     ForEach(WatchDurationOption.allCases) { option in
@@ -285,6 +304,17 @@ struct WatchBreathingSessionView: View {
 
     private func playHaptic(for type: WKHapticType) {
         WKInterfaceDevice.current().play(type)
+    }
+
+    private func updateDurationOption(locationX: CGFloat, width: CGFloat, thumbDiameter: CGFloat) {
+        let availableWidth = max(width - thumbDiameter, 1)
+        let clampedX = min(max(locationX - (thumbDiameter / 2), 0), availableWidth)
+        let rawIndex = (clampedX / availableWidth) * CGFloat(WatchDurationOption.allCases.count - 1)
+        let index = min(
+            max(Int(rawIndex.rounded()), 0),
+            WatchDurationOption.allCases.count - 1
+        )
+        durationOption = WatchDurationOption.allCases[index]
     }
 
     private func playHapticSequence(_ types: [WKHapticType], intervalNanoseconds: UInt64 = 160_000_000) {
