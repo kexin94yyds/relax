@@ -21,8 +21,8 @@ struct WatchBreathingSessionView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                header
-                Spacer(minLength: 4)
+                topBar
+                Spacer(minLength: 2)
                 breathingCircle
                 Spacer(minLength: 4)
                 status
@@ -30,12 +30,8 @@ struct WatchBreathingSessionView: View {
                 controls
             }
             .padding(.horizontal, 10)
-            .padding(.top, 4)
+            .padding(.top, 2)
             .padding(.bottom, 8)
-
-            backButton
-                .padding(.top, 4)
-                .padding(.leading, 8)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -118,11 +114,23 @@ struct WatchBreathingSessionView: View {
         .buttonStyle(.plain)
     }
 
-    private var header: some View {
-        Text(BreathingExerciseMath.rhythmText(for: method))
-            .font(.system(size: 12, weight: .semibold, design: .monospaced))
-            .foregroundStyle(WatchTheme.secondary)
-            .monospacedDigit()
+    private var topBar: some View {
+        ZStack {
+            HStack(spacing: 0) {
+                backButton
+
+                Spacer()
+
+                Color.clear
+                    .frame(width: 44, height: 44)
+            }
+
+            Text(BreathingExerciseMath.rhythmText(for: method))
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                .foregroundStyle(WatchTheme.secondary)
+                .monospacedDigit()
+        }
+        .frame(height: 44)
     }
 
     private var breathingCircle: some View {
