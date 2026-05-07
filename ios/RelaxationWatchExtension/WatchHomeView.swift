@@ -26,14 +26,14 @@ struct WatchHomeView: View {
                         }
                     }
                     .padding(.horizontal, 12)
-                    .padding(.top, 42)
+                    .padding(.top, 32)
                     .padding(.bottom, 12)
                 }
 
                 Text("relax")
                     .font(.system(size: 28, weight: .medium))
                     .foregroundStyle(WatchTheme.muted)
-                    .padding(.top, 4)
+                    .padding(.top, -4)
                     .padding(.leading, 12)
             }
             .navigationDestination(for: BreathingMethod.self) { method in
