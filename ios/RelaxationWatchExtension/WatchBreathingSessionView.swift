@@ -333,6 +333,7 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
     case oneMinute
     case threeMinutes
     case fiveMinutes
+    case tenMinutes
 
     var id: String { title }
 
@@ -344,6 +345,8 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
             return 3 * 60
         case .fiveMinutes:
             return 5 * 60
+        case .tenMinutes:
+            return 10 * 60
         }
     }
 
@@ -355,6 +358,8 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
             return "3 分钟"
         case .fiveMinutes:
             return "5 分钟"
+        case .tenMinutes:
+            return "10 分钟"
         }
     }
 
@@ -366,6 +371,8 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
             return "3"
         case .fiveMinutes:
             return "5"
+        case .tenMinutes:
+            return "10"
         }
     }
 
@@ -376,6 +383,8 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
         case .threeMinutes:
             return .fiveMinutes
         case .fiveMinutes:
+            return .tenMinutes
+        case .tenMinutes:
             return .oneMinute
         }
     }
