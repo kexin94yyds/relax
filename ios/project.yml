@@ -3,16 +3,21 @@ options:
   bundleIdPrefix: com.local
   deploymentTarget:
     iOS: "16.0"
+    watchOS: "10.0"
 settings:
   base:
     SWIFT_VERSION: "6.0"
     IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    WATCHOS_DEPLOYMENT_TARGET: "10.0"
 targets:
   RelaxationApp:
     type: application
     platform: iOS
     sources:
       - path: RelaxationApp
+      - path: Shared
+    dependencies:
+      - target: RelaxationWatchApp
     settings:
       base:
         CODE_SIGN_STYLE: Automatic
@@ -21,3 +26,36 @@ targets:
         PRODUCT_NAME: RelaxationApp
         INFOPLIST_FILE: RelaxationApp/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  RelaxationWatchApp:
+    type: application.watchapp2
+    platform: watchOS
+    deploymentTarget: "10.0"
+    sources:
+      - path: RelaxationWatchApp
+    dependencies:
+      - target: RelaxationWatchExtension
+    settings:
+      base:
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: UM3Z9G5DNH
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.relaxationapp.watchkitapp
+        PRODUCT_NAME: RelaxationWatchApp
+        INFOPLIST_FILE: RelaxationWatchApp/Info.plist
+
+  RelaxationWatchExtension:
+    type: watchkit2-extension
+    platform: watchOS
+    deploymentTarget: "10.0"
+    sources:
+      - path: Shared
+      - path: RelaxationApp/Models
+      - path: RelaxationWatchExtension
+    settings:
+      base:
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: UM3Z9G5DNH
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.relaxationapp.watchkitapp.watchkitextension
+        PRODUCT_NAME: RelaxationWatchExtension
+        INFOPLIST_FILE: RelaxationWatchExtension/Info.plist
+        WK_APP_BUNDLE_IDENTIFIER: com.local.relaxationapp.watchkitapp
