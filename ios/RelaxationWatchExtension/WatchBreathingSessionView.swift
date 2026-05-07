@@ -21,8 +21,6 @@ struct WatchBreathingSessionView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                topBar
-                Spacer(minLength: 2)
                 header
                 Spacer(minLength: 4)
                 breathingCircle
@@ -34,6 +32,11 @@ struct WatchBreathingSessionView: View {
             .padding(.horizontal, 10)
             .padding(.top, 4)
             .padding(.bottom, 8)
+        }
+        .overlay(alignment: .topLeading) {
+            backButton
+                .padding(.top, 4)
+                .padding(.leading, 2)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -51,29 +54,24 @@ struct WatchBreathingSessionView: View {
         BreathingExerciseMath.plan(for: method, targetSeconds: durationOption.seconds)
     }
 
-    private var topBar: some View {
-        HStack {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(WatchTheme.foreground)
-                    .frame(width: 30, height: 30)
-                    .background(
-                        Circle()
-                            .fill(WatchTheme.softFill)
-                    )
-                    .overlay(
-                        Circle()
-                            .stroke(WatchTheme.hairline, lineWidth: 1)
-                    )
-            }
-            .buttonStyle(.plain)
-
-            Spacer()
+    private var backButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "chevron.left")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(WatchTheme.foreground)
+                .frame(width: 30, height: 30)
+                .background(
+                    Circle()
+                        .fill(WatchTheme.softFill)
+                )
+                .overlay(
+                    Circle()
+                        .stroke(WatchTheme.hairline, lineWidth: 1)
+                )
         }
-        .frame(height: 30)
+        .buttonStyle(.plain)
     }
 
     private var header: some View {
