@@ -30,7 +30,7 @@ struct WatchBreathingSessionView: View {
                 controls
             }
             .padding(.horizontal, 10)
-            .padding(.top, 10)
+            .padding(.top, 8)
             .padding(.bottom, 8)
 
             backButton
@@ -77,18 +77,10 @@ struct WatchBreathingSessionView: View {
     }
 
     private var header: some View {
-        VStack(spacing: 2) {
-            Text(method.name)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(WatchTheme.foreground)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-
-            Text(BreathingExerciseMath.rhythmText(for: method))
-                .font(.system(size: 10, weight: .medium, design: .monospaced))
-                .foregroundStyle(WatchTheme.secondary)
-                .monospacedDigit()
-        }
+        Text(BreathingExerciseMath.rhythmText(for: method))
+            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+            .foregroundStyle(WatchTheme.secondary)
+            .monospacedDigit()
     }
 
     private var breathingCircle: some View {
