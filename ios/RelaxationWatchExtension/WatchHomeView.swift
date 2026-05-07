@@ -15,7 +15,7 @@ struct WatchHomeView: View {
                 .listStyle(.carousel)
                 .scrollContentBackground(.hidden)
                 .background(WatchTheme.background)
-                .padding(.top, 24)
+                .padding(.top, 76)
 
                 Text("relax")
                     .font(.system(size: 13, weight: .semibold))
@@ -24,6 +24,7 @@ struct WatchHomeView: View {
                     .padding(.leading, 30)
                     .accessibilityAddTraits(.isHeader)
             }
+            .ignoresSafeArea(.container, edges: .top)
             .background(WatchTheme.background)
             .toolbar(.hidden, for: .navigationBar)
         }
