@@ -59,3 +59,22 @@ targets:
         PRODUCT_NAME: RelaxationWatchExtension
         INFOPLIST_FILE: RelaxationWatchExtension/Info.plist
         WK_APP_BUNDLE_IDENTIFIER: com.local.relaxationapp.watchkitapp
+
+schemes:
+  RelaxationApp:
+    build:
+      targets:
+        RelaxationApp: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  RelaxationWatchApp:
+    build:
+      targets:
+        RelaxationWatchApp: all
+    run:
+      config: Debug
+    archive:
+      config: Release
