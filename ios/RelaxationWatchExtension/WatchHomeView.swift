@@ -12,16 +12,24 @@ struct WatchHomeView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            List(BreathingMethod.all) { method in
-                NavigationLink(value: method) {
-                    WatchMethodRow(method: method)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("relax")
+                        .font(.system(size: 28, weight: .medium))
+                        .foregroundStyle(WatchTheme.muted)
+                        .padding(.top, 4)
+
+                    ForEach(BreathingMethod.all) { method in
+                        NavigationLink(value: method) {
+                            WatchMethodRow(method: method)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
-                .listRowBackground(WatchTheme.background)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 12)
             }
-            .listStyle(.carousel)
-            .scrollContentBackground(.hidden)
             .background(WatchTheme.background)
-            .navigationTitle("relax")
             .navigationDestination(for: BreathingMethod.self) { method in
                 WatchBreathingSessionView(method: method)
             }
