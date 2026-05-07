@@ -22,18 +22,18 @@ struct WatchBreathingSessionView: View {
 
             VStack(spacing: 0) {
                 topBar
-                Spacer(minLength: 4)
+                Spacer(minLength: 2)
                 header
-                Spacer(minLength: 8)
+                Spacer(minLength: 4)
                 breathingCircle
-                Spacer(minLength: 8)
+                Spacer(minLength: 4)
                 status
-                Spacer(minLength: 10)
+                Spacer(minLength: 6)
                 controls
             }
             .padding(.horizontal, 10)
-            .padding(.top, 6)
-            .padding(.bottom, 10)
+            .padding(.top, 4)
+            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -57,9 +57,9 @@ struct WatchBreathingSessionView: View {
                 dismiss()
             } label: {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(WatchTheme.foreground)
-                    .frame(width: 34, height: 34)
+                    .frame(width: 30, height: 30)
                     .background(
                         Circle()
                             .fill(WatchTheme.softFill)
@@ -73,19 +73,19 @@ struct WatchBreathingSessionView: View {
 
             Spacer()
         }
-        .frame(height: 34)
+        .frame(height: 30)
     }
 
     private var header: some View {
         VStack(spacing: 2) {
             Text(method.name)
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(WatchTheme.foreground)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
 
             Text(BreathingExerciseMath.rhythmText(for: method))
-                .font(.system(size: 11, weight: .medium, design: .monospaced))
+                .font(.system(size: 10, weight: .medium, design: .monospaced))
                 .foregroundStyle(WatchTheme.secondary)
                 .monospacedDigit()
         }
@@ -95,38 +95,38 @@ struct WatchBreathingSessionView: View {
         ZStack {
             Circle()
                 .stroke(WatchTheme.hairline, lineWidth: 1)
-                .frame(width: 108, height: 108)
+                .frame(width: 92, height: 92)
 
             Circle()
-                .stroke(WatchTheme.foreground.opacity(0.14), lineWidth: 12)
-                .frame(width: 90, height: 90)
+                .stroke(WatchTheme.foreground.opacity(0.14), lineWidth: 10)
+                .frame(width: 76, height: 76)
                 .scaleEffect(BreathingExerciseMath.circleScale(for: currentPhase))
                 .animation(.easeInOut(duration: 1), value: currentPhase)
 
             Circle()
                 .stroke(WatchTheme.foreground, lineWidth: 1.5)
-                .frame(width: 90, height: 90)
+                .frame(width: 76, height: 76)
                 .scaleEffect(BreathingExerciseMath.circleScale(for: currentPhase))
                 .animation(.easeInOut(duration: 1), value: currentPhase)
 
             VStack(spacing: 2) {
                 Text(currentPhase.title)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 11, weight: .semibold))
                     .foregroundStyle(WatchTheme.foreground)
 
                 Text("\(currentPhase == .finished ? 0 : countdown)")
-                    .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 24, weight: .semibold, design: .monospaced))
                     .monospacedDigit()
                     .foregroundStyle(WatchTheme.foreground)
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 116)
+        .frame(maxWidth: .infinity, minHeight: 94)
     }
 
     private var status: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             Text(currentPhase == .ready ? durationOption.title : "第 \(max(currentCycle, 1)) / \(plan.cycles) 轮")
-                .font(.system(size: 12, weight: .medium))
+                .font(.system(size: 11, weight: .medium))
                 .foregroundStyle(WatchTheme.secondary)
                 .monospacedDigit()
 
@@ -141,7 +141,7 @@ struct WatchBreathingSessionView: View {
                 .buttonStyle(WatchSecondaryButtonStyle())
             } else {
                 Text(BreathingExerciseMath.formattedDuration(plan.totalDuration))
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .foregroundStyle(WatchTheme.muted)
                     .monospacedDigit()
             }
@@ -304,13 +304,13 @@ private enum WatchDurationOption: CaseIterable, Identifiable {
 private struct WatchPrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: 14, weight: .semibold))
+            .font(.system(size: 13, weight: .semibold))
             .foregroundStyle(WatchTheme.background)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 9)
+            .padding(.vertical, 7)
             .background(
                 WatchTheme.foreground.opacity(configuration.isPressed ? 0.78 : 1),
-                in: RoundedRectangle(cornerRadius: 20, style: .continuous)
+                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
             )
     }
 }
@@ -318,16 +318,16 @@ private struct WatchPrimaryButtonStyle: ButtonStyle {
 private struct WatchSecondaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: 13, weight: .semibold))
+            .font(.system(size: 12, weight: .semibold))
             .foregroundStyle(WatchTheme.foreground)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 9)
+            .padding(.vertical, 7)
             .background(
                 WatchTheme.softFill.opacity(configuration.isPressed ? 0.72 : 1),
-                in: RoundedRectangle(cornerRadius: 20, style: .continuous)
+                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .stroke(WatchTheme.hairline, lineWidth: 1)
             )
     }
