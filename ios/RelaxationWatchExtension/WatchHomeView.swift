@@ -14,8 +14,15 @@ struct WatchHomeView: View {
             .listStyle(.carousel)
             .scrollContentBackground(.hidden)
             .background(WatchTheme.background)
-            .navigationTitle("relax")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Text("relax")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(WatchTheme.secondary)
+                        .accessibilityAddTraits(.isHeader)
+                }
+            }
         }
         .tint(WatchTheme.foreground)
         .background(WatchTheme.background)
