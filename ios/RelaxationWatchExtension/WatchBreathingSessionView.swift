@@ -21,8 +21,8 @@ struct WatchBreathingSessionView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                topBar
-                Spacer(minLength: 2)
+                header
+                Spacer(minLength: 4)
                 breathingCircle
                 Spacer(minLength: 4)
                 status
@@ -30,8 +30,12 @@ struct WatchBreathingSessionView: View {
                 controls
             }
             .padding(.horizontal, 10)
-            .padding(.top, 2)
+            .padding(.top, 8)
             .padding(.bottom, 8)
+
+            backButton
+                .padding(.top, 8)
+                .padding(.leading, 8)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -114,23 +118,11 @@ struct WatchBreathingSessionView: View {
         .buttonStyle(.plain)
     }
 
-    private var topBar: some View {
-        ZStack {
-            HStack(spacing: 0) {
-                backButton
-
-                Spacer()
-
-                Color.clear
-                    .frame(width: 44, height: 44)
-            }
-
-            Text(BreathingExerciseMath.rhythmText(for: method))
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                .foregroundStyle(WatchTheme.secondary)
-                .monospacedDigit()
-        }
-        .frame(height: 44)
+    private var header: some View {
+        Text(BreathingExerciseMath.rhythmText(for: method))
+            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+            .foregroundStyle(WatchTheme.secondary)
+            .monospacedDigit()
     }
 
     private var breathingCircle: some View {
@@ -179,7 +171,7 @@ struct WatchBreathingSessionView: View {
                 HStack(spacing: 0) {
                     ForEach(WatchDurationOption.allCases) { option in
                         Text(option.tickLabel)
-                            .font(.system(size: 11, weight: option == durationOption ? .semibold : .medium))
+                            .font(.system(size: 10, weight: .medium))
                             .foregroundStyle(option == durationOption ? WatchTheme.foreground : WatchTheme.muted)
                             .frame(maxWidth: .infinity)
                     }
