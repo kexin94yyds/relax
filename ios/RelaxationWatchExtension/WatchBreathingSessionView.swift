@@ -16,7 +16,7 @@ struct WatchBreathingSessionView: View {
     @State private var timer: Timer?
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             WatchTheme.background
                 .ignoresSafeArea()
 
@@ -32,8 +32,7 @@ struct WatchBreathingSessionView: View {
             .padding(.horizontal, 10)
             .padding(.top, 10)
             .padding(.bottom, 8)
-        }
-        .overlay(alignment: .topLeading) {
+
             backButton
                 .padding(.top, 4)
                 .padding(.leading, 4)
