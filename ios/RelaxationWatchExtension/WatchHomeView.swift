@@ -1,12 +1,19 @@
 import SwiftUI
 
 struct WatchHomeView: View {
+    let autoOpenMethod: BreathingMethod?
+
+    @State private var path: [BreathingMethod] = []
+    @State private var hasAutoOpened = false
+
+    init(autoOpenMethod: BreathingMethod? = nil) {
+        self.autoOpenMethod = autoOpenMethod
+    }
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List(BreathingMethod.all) { method in
-                NavigationLink {
-                    WatchBreathingSessionView(method: method)
-                } label: {
+                NavigationLink(value: method) {
                     WatchMethodRow(method: method)
                 }
                 .listRowBackground(WatchTheme.background)
@@ -15,6 +22,14 @@ struct WatchHomeView: View {
             .scrollContentBackground(.hidden)
             .background(WatchTheme.background)
             .navigationTitle("relax")
+            .navigationDestination(for: BreathingMethod.self) { method in
+                WatchBreathingSessionView(method: method)
+            }
+            .onAppear {
+                guard !hasAutoOpened, let autoOpenMethod else { return }
+                hasAutoOpened = true
+                path = [autoOpenMethod]
+            }
         }
         .tint(WatchTheme.foreground)
         .background(WatchTheme.background)
