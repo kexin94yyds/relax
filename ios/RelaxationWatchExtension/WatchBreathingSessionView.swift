@@ -34,8 +34,8 @@ struct WatchBreathingSessionView: View {
             .padding(.bottom, 8)
 
             backButton
-                .padding(.top, 4)
-                .padding(.leading, 4)
+                .padding(.top, 8)
+                .padding(.leading, 8)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -57,18 +57,21 @@ struct WatchBreathingSessionView: View {
         Button {
             dismiss()
         } label: {
-            Image(systemName: "chevron.left")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(WatchTheme.foreground)
-                .frame(width: 30, height: 30)
-                .background(
-                    Circle()
-                        .fill(WatchTheme.softFill)
-                )
-                .overlay(
-                    Circle()
-                        .stroke(WatchTheme.hairline, lineWidth: 1)
-                )
+            ZStack {
+                Circle()
+                    .fill(WatchTheme.softFill)
+                    .frame(width: 30, height: 30)
+
+                Circle()
+                    .stroke(WatchTheme.hairline, lineWidth: 1)
+                    .frame(width: 30, height: 30)
+
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(WatchTheme.foreground)
+            }
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
