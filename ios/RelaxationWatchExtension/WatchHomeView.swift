@@ -12,30 +12,24 @@ struct WatchHomeView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            ZStack(alignment: .topLeading) {
-                WatchTheme.background
-                    .ignoresSafeArea()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("relax")
+                        .font(.system(size: 28, weight: .medium))
+                        .foregroundStyle(WatchTheme.muted)
+                        .padding(.top, 4)
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        ForEach(BreathingMethod.all) { method in
-                            NavigationLink(value: method) {
-                                WatchMethodRow(method: method)
-                            }
-                            .buttonStyle(.plain)
+                    ForEach(BreathingMethod.all) { method in
+                        NavigationLink(value: method) {
+                            WatchMethodRow(method: method)
                         }
+                        .buttonStyle(.plain)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.top, 42)
-                    .padding(.bottom, 12)
                 }
-
-                Text("relax")
-                    .font(.system(size: 28, weight: .medium))
-                    .foregroundStyle(WatchTheme.muted)
-                    .padding(.top, 4)
-                    .padding(.leading, 12)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 12)
             }
+            .background(WatchTheme.background)
             .navigationDestination(for: BreathingMethod.self) { method in
                 WatchBreathingSessionView(method: method)
             }
