@@ -1,51 +1,20 @@
 import SwiftUI
 
 struct WatchHomeView: View {
-    let autoOpenMethod: BreathingMethod?
-
-    @State private var path: [BreathingMethod] = []
-    @State private var hasAutoOpened = false
-
-    init(autoOpenMethod: BreathingMethod? = nil) {
-        self.autoOpenMethod = autoOpenMethod
-    }
-
     var body: some View {
-        NavigationStack(path: $path) {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 0) {
-                    Text("relax")
-                        .font(.system(size: 28, weight: .medium))
-                        .foregroundStyle(WatchTheme.muted)
-
-                    Spacer(minLength: 0)
+        NavigationStack {
+            List(BreathingMethod.all) { method in
+                NavigationLink {
+                    WatchBreathingSessionView(method: method)
+                } label: {
+                    WatchMethodRow(method: method)
                 }
-                .padding(.horizontal, 12)
-                .frame(height: 28)
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        ForEach(BreathingMethod.all) { method in
-                            NavigationLink(value: method) {
-                                WatchMethodRow(method: method)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.top, 8)
-                    .padding(.bottom, 12)
-                }
+                .listRowBackground(WatchTheme.background)
             }
+            .listStyle(.carousel)
+            .scrollContentBackground(.hidden)
             .background(WatchTheme.background)
-            .navigationDestination(for: BreathingMethod.self) { method in
-                WatchBreathingSessionView(method: method)
-            }
-            .onAppear {
-                guard !hasAutoOpened, let autoOpenMethod else { return }
-                hasAutoOpened = true
-                path = [autoOpenMethod]
-            }
+            .navigationTitle("relax")
         }
         .tint(WatchTheme.foreground)
         .background(WatchTheme.background)
