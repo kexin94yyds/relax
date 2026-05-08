@@ -312,6 +312,52 @@ struct WatchBreathingSessionView: View {
         }
     }
 
+    private func prepareAudio() {
+        guard !audioPrepared else { return }
+
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+            audioPrepared = true
+        } catch {
+            print("Watch 音频初始化失败: \(error)")
+        }
+    }
+
+    private func releaseAudio() {
+        guard audioPrepared else { return }
+
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, options: [.notifyOthersOnDeactivation])
+        } catch {
+            print("Watch 音频释放失败: \(error)")
+        }
+        audioPrepared = false
+    }
+
+    private func playSoftTone(frequency: Double, duration: Double, startVolume: Float, endVolume: Float) {
+        prepareAudio()
+        guard audioPrepared else { return }
+
+        do {
+            let player = try AVAudioPlayer(data: wavToneData(
+                frequency: frequency,
+                duration: duration,
+                startVolume: startVolume,
+                endVolume: endVolume
+            ))
+            player.prepareToPlay()
+            player.play()
+            activeFeedbackPlayers.append(player)
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration + 0.25) {
+                activeFeedbackPlayers.removeAll { $0 === player }
+            }
+        } catch {
+            print("Watch 提示音播放失败: \(error)")
+        }
+    }
+
     private func updateDurationOption(locationX: CGFloat, width: CGFloat, thumbDiameter: CGFloat) {
         let availableWidth = max(width - thumbDiameter, 1)
         let clampedX = min(max(locationX - (thumbDiameter / 2), 0), availableWidth)
@@ -323,15 +369,57 @@ struct WatchBreathingSessionView: View {
         durationOption = WatchDurationOption.allCases[index]
     }
 
-    private func playHapticSequence(_ types: [WKHapticType], intervalNanoseconds: UInt64 = 160_000_000) {
-        Task { @MainActor in
-            for (index, type) in types.enumerated() {
-                if index > 0 {
-                    try? await Task.sleep(nanoseconds: intervalNanoseconds)
-                }
-                playHaptic(for: type)
-            }
+    private func wavToneData(frequency: Double, duration: Double, startVolume: Float, endVolume: Float) -> Data {
+        let sampleRate = 44_100
+        let channelCount = 1
+        let bitsPerSample = 16
+        let bytesPerSample = bitsPerSample / 8
+        let frameCount = max(1, Int(Double(sampleRate) * duration))
+        let byteRate = sampleRate * channelCount * bytesPerSample
+        let blockAlign = channelCount * bytesPerSample
+
+        var sampleData = Data(capacity: frameCount * bytesPerSample)
+        let volumeRatio = max(Double(endVolume / startVolume), 0.001)
+
+        for frame in 0..<frameCount {
+            let progress = Double(frame) / Double(frameCount)
+            let envelope = Double(startVolume) * pow(volumeRatio, progress)
+            let wave = sin(2 * Double.pi * frequency * Double(frame) / Double(sampleRate))
+            let clamped = max(-1, min(1, wave * envelope))
+            var sample = Int16(clamped * Double(Int16.max)).littleEndian
+            sampleData.append(Data(bytes: &sample, count: MemoryLayout<Int16>.size))
         }
+
+        var data = Data()
+        appendASCII("RIFF", to: &data)
+        appendUInt32(UInt32(36 + sampleData.count), to: &data)
+        appendASCII("WAVE", to: &data)
+        appendASCII("fmt ", to: &data)
+        appendUInt32(16, to: &data)
+        appendUInt16(1, to: &data)
+        appendUInt16(UInt16(channelCount), to: &data)
+        appendUInt32(UInt32(sampleRate), to: &data)
+        appendUInt32(UInt32(byteRate), to: &data)
+        appendUInt16(UInt16(blockAlign), to: &data)
+        appendUInt16(UInt16(bitsPerSample), to: &data)
+        appendASCII("data", to: &data)
+        appendUInt32(UInt32(sampleData.count), to: &data)
+        data.append(sampleData)
+        return data
+    }
+
+    private func appendASCII(_ string: String, to data: inout Data) {
+        data.append(string.data(using: .ascii) ?? Data())
+    }
+
+    private func appendUInt16(_ value: UInt16, to data: inout Data) {
+        var littleEndian = value.littleEndian
+        data.append(Data(bytes: &littleEndian, count: MemoryLayout<UInt16>.size))
+    }
+
+    private func appendUInt32(_ value: UInt32, to data: inout Data) {
+        var littleEndian = value.littleEndian
+        data.append(Data(bytes: &littleEndian, count: MemoryLayout<UInt32>.size))
     }
 }
 
