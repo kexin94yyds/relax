@@ -274,12 +274,7 @@ struct WatchBreathingSessionView: View {
         elapsed = snapshot.elapsed
 
         if playHaptics && (currentPhase != previousPhase || currentCycle != previousCycle) {
-            playPhaseHaptic()
-        } else if playHaptics,
-                  currentPhase != .ready,
-                  snapshot.countdown == 1,
-                  previousCountdown != 1 {
-            playHaptic(for: .click)
+            playPhaseCue(for: currentPhase)
         }
     }
 
@@ -290,26 +285,31 @@ struct WatchBreathingSessionView: View {
         elapsed = plan.totalDuration
         startedAt = nil
         stopTimer()
-        playHaptic(for: .success)
-    }
-
-    private func playPhaseHaptic() {
-        switch currentPhase {
-        case .inhale:
-            playHapticSequence([.start, .directionUp], intervalNanoseconds: 120_000_000)
-        case .hold:
-            playHaptic(for: .notification)
-        case .exhale:
-            playHapticSequence([.directionDown, .notification], intervalNanoseconds: 120_000_000)
-        case .finished:
-            playHaptic(for: .success)
-        case .ready:
-            break
-        }
+        playPhaseCue(for: .finished)
+        releaseAudio()
     }
 
     private func playHaptic(for type: WKHapticType) {
         WKInterfaceDevice.current().play(type)
+    }
+
+    private func playPhaseCue(for phase: BreathingPhase) {
+        switch phase {
+        case .ready:
+            break
+        case .inhale:
+            playSoftTone(frequency: 523.25, duration: 0.09, startVolume: 0.055, endVolume: 0.001)
+            playHaptic(for: .click)
+        case .hold:
+            playSoftTone(frequency: 659.25, duration: 0.075, startVolume: 0.055, endVolume: 0.001)
+            playHaptic(for: .click)
+        case .exhale:
+            playSoftTone(frequency: 392, duration: 0.12, startVolume: 0.055, endVolume: 0.001)
+            playHaptic(for: .click)
+        case .finished:
+            playSoftTone(frequency: 523.25, duration: 0.68, startVolume: 0.08, endVolume: 0.001)
+            playHaptic(for: .click)
+        }
     }
 
     private func updateDurationOption(locationX: CGFloat, width: CGFloat, thumbDiameter: CGFloat) {
