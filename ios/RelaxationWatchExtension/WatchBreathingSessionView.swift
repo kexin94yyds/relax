@@ -290,11 +290,11 @@ struct WatchBreathingSessionView: View {
     private func playPhaseHaptic() {
         switch currentPhase {
         case .inhale:
-            playHapticSequence([.start, .directionUp])
+            playHapticSequence([.start, .directionUp], intervalNanoseconds: 120_000_000)
         case .hold:
-            playHaptic(for: .click)
+            playHaptic(for: .notification)
         case .exhale:
-            playHapticSequence([.directionDown, .click])
+            playHapticSequence([.directionDown, .notification], intervalNanoseconds: 120_000_000)
         case .finished:
             playHaptic(for: .success)
         case .ready:
