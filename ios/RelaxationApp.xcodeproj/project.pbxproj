@@ -28,6 +28,7 @@
 		EAF2F50D048BEE9F0768E456 /* WatchBreathingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F501B9CB3918830C6CF2B4 /* WatchBreathingSessionView.swift */; };
 		ECCEBD35429DD8F4381EF5E0 /* BreathingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744002A7502609DB44B28D7A /* BreathingMethod.swift */; };
 		F9AAB00963909AB312462930 /* MethodCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */; };
+		FEB8BCB33524D48D006C3AC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5FF45AC08D150CD3F0C7FB6 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		C07EA84CA6FB5F3E8ACE4B61 /* BreathingExerciseMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingExerciseMath.swift; sourceTree = "<group>"; };
 		C1A25B363A28CD5C6094737C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C9A73CAD34CD6ADEED4A87CE /* RelaxationWatchExtensionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationWatchExtensionApp.swift; sourceTree = "<group>"; };
+		D5FF45AC08D150CD3F0C7FB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB13650177ADF458447ED4A5 /* RelaxationWatchExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RelaxationWatchExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -108,6 +110,7 @@
 		38F3C2DC9110643A99B7514B /* RelaxationWatchApp */ = {
 			isa = PBXGroup;
 			children = (
+				D5FF45AC08D150CD3F0C7FB6 /* Assets.xcassets */,
 				C1A25B363A28CD5C6094737C /* Info.plist */,
 			);
 			path = RelaxationWatchApp;
@@ -195,6 +198,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A3822E50D3DC40DA3FE17C7 /* Build configuration list for PBXNativeTarget "RelaxationWatchApp" */;
 			buildPhases = (
+				CAF9AE2C8C2BE6AAB6A44537 /* Resources */,
 				DFC9A4EFC02E78FBB3591D4E /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -291,6 +295,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CAF9AE2C8C2BE6AAB6A44537 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEB8BCB33524D48D006C3AC8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D0129785A1D6F561813BBF78 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -353,6 +365,7 @@
 		07AE7516D3C8EC043E26052C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UM3Z9G5DNH;
 				INFOPLIST_FILE = RelaxationWatchApp/Info.plist;
@@ -569,6 +582,7 @@
 		E2827EC1DCD3BA7D3A3F3FE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UM3Z9G5DNH;
 				INFOPLIST_FILE = RelaxationWatchApp/Info.plist;
