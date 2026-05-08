@@ -33,6 +33,7 @@ targets:
     deploymentTarget: "10.0"
     sources:
       - path: RelaxationWatchApp
+      - path: RelaxationWatchApp/Assets.xcassets
     dependencies:
       - target: RelaxationWatchExtension
     settings:
@@ -42,6 +43,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.local.relaxationapp.watchkitapp
         PRODUCT_NAME: RelaxationWatchApp
         INFOPLIST_FILE: RelaxationWatchApp/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
   RelaxationWatchExtension:
     type: watchkit2-extension
