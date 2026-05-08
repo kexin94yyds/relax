@@ -46,7 +46,7 @@ struct WatchBreathingSessionView: View {
             stopTimer()
             releaseAudio()
         }
-        .onChange(of: scenePhase) { newPhase in
+        .onChange(of: scenePhase) { _, newPhase in
             if isActive && (newPhase == .active || newPhase == .inactive || newPhase == .background) {
                 syncProgressFromClock(playHaptics: false)
             }
@@ -254,7 +254,6 @@ struct WatchBreathingSessionView: View {
         let realElapsed = min(max(Int(Date().timeIntervalSince(startedAt)), 0), plan.totalDuration)
         let previousPhase = currentPhase
         let previousCycle = currentCycle
-        let previousCountdown = countdown
         let snapshot = BreathingExerciseMath.snapshot(
             for: realElapsed,
             method: method,
