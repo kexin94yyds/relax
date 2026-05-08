@@ -8,6 +8,7 @@ struct WatchBreathingSessionView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @State private var durationOption: WatchDurationOption = .threeMinutes
+    @State private var durationCrownValue = Double(WatchDurationOption.allCases.firstIndex(of: .threeMinutes) ?? 0)
     @State private var currentPhase: BreathingPhase = .ready
     @State private var countdown = 0
     @State private var currentCycle = 0
@@ -17,6 +18,7 @@ struct WatchBreathingSessionView: View {
     @State private var timer: Timer?
     @State private var activeFeedbackPlayers: [AVAudioPlayer] = []
     @State private var audioPrepared = false
+    @FocusState private var durationControlFocused: Bool
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -42,6 +44,9 @@ struct WatchBreathingSessionView: View {
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            focusDurationControlIfNeeded()
+        }
         .onDisappear {
             stopTimer()
             releaseAudio()
@@ -50,6 +55,12 @@ struct WatchBreathingSessionView: View {
             if isActive && (newPhase == .active || newPhase == .inactive || newPhase == .background) {
                 syncProgressFromClock(playHaptics: false)
             }
+        }
+        .onChange(of: isActive) { _, _ in
+            focusDurationControlIfNeeded()
+        }
+        .onChange(of: currentPhase) { _, _ in
+            focusDurationControlIfNeeded()
         }
     }
 
@@ -97,6 +108,10 @@ struct WatchBreathingSessionView: View {
     private var durationSelectionProgress: CGFloat {
         guard WatchDurationOption.allCases.count > 1 else { return 0 }
         return CGFloat(durationSelectionIndex) / CGFloat(WatchDurationOption.allCases.count - 1)
+    }
+
+    private var durationControlAvailable: Bool {
+        !isActive && currentPhase == .ready
     }
 
     private var backButton: some View {
@@ -171,6 +186,20 @@ struct WatchBreathingSessionView: View {
             if !isActive && currentPhase == .ready {
                 durationDragControl
                     .padding(.horizontal, 10)
+                    .focusable(durationControlAvailable)
+                    .focused($durationControlFocused)
+                    .digitalCrownRotation(
+                        detent: $durationCrownValue,
+                        from: 0,
+                        through: Double(WatchDurationOption.allCases.count - 1),
+                        by: 1,
+                        sensitivity: .medium,
+                        isContinuous: false,
+                        isHapticFeedbackEnabled: true
+                    )
+                    .onChange(of: durationCrownValue) { _, newValue in
+                        updateDurationOption(crownValue: newValue)
+                    }
 
                 HStack(spacing: 0) {
                     ForEach(WatchDurationOption.allCases) { option in
@@ -360,11 +389,29 @@ struct WatchBreathingSessionView: View {
         let availableWidth = max(width - thumbDiameter, 1)
         let clampedX = min(max(locationX - (thumbDiameter / 2), 0), availableWidth)
         let rawIndex = (clampedX / availableWidth) * CGFloat(WatchDurationOption.allCases.count - 1)
-        let index = min(
-            max(Int(rawIndex.rounded()), 0),
-            WatchDurationOption.allCases.count - 1
-        )
+        selectDurationOption(index: Int(rawIndex.rounded()))
+    }
+
+    private func updateDurationOption(crownValue: Double) {
+        guard durationControlAvailable else { return }
+
+        selectDurationOption(index: Int(crownValue.rounded()))
+    }
+
+    private func selectDurationOption(index: Int) {
+        let index = min(max(index, 0), WatchDurationOption.allCases.count - 1)
         durationOption = WatchDurationOption.allCases[index]
+
+        let crownValue = Double(index)
+        if durationCrownValue != crownValue {
+            durationCrownValue = crownValue
+        }
+    }
+
+    private func focusDurationControlIfNeeded() {
+        Task { @MainActor in
+            durationControlFocused = durationControlAvailable
+        }
     }
 
     private func wavToneData(frequency: Double, duration: Double, startVolume: Float, endVolume: Float) -> Data {
