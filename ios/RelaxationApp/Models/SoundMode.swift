@@ -12,7 +12,7 @@ enum SoundMode: String, CaseIterable, Identifiable {
         case .classic:
             return "经典"
         case .silent:
-            return "静音"
+            return "纯震动"
         }
     }
 }

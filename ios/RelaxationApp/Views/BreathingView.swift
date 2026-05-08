@@ -100,7 +100,7 @@ struct BreathingView: View {
                     )
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(soundMode == .silent ? "开启声音" : "关闭声音")
+            .accessibilityLabel(soundMode == .silent ? "开启柔和声音" : "切换到纯震动")
         }
         .padding(.top, 18)
     }
