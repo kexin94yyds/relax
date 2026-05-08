@@ -1,3 +1,4 @@
+import AVFoundation
 import SwiftUI
 import WatchKit
 
@@ -14,6 +15,8 @@ struct WatchBreathingSessionView: View {
     @State private var isActive = false
     @State private var startedAt: Date?
     @State private var timer: Timer?
+    @State private var activeFeedbackPlayers: [AVAudioPlayer] = []
+    @State private var audioPrepared = false
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -41,6 +44,7 @@ struct WatchBreathingSessionView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             stopTimer()
+            releaseAudio()
         }
         .onChange(of: scenePhase) { newPhase in
             if isActive && (newPhase == .active || newPhase == .inactive || newPhase == .background) {
@@ -212,13 +216,14 @@ struct WatchBreathingSessionView: View {
 
     private func startSession() {
         stopTimer()
+        prepareAudio()
         isActive = true
         startedAt = Date()
         currentCycle = 1
         elapsed = 0
         currentPhase = .inhale
         countdown = method.inhale
-        playHapticSequence([.start, .directionUp])
+        playPhaseCue(for: .inhale)
 
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             Task { @MainActor in
@@ -235,7 +240,8 @@ struct WatchBreathingSessionView: View {
         currentCycle = 0
         elapsed = 0
         startedAt = nil
-        playHaptic(for: .stop)
+        playHaptic(for: .click)
+        releaseAudio()
     }
 
     private func stopTimer() {
