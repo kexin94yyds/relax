@@ -241,7 +241,6 @@ struct WatchBreathingSessionView: View {
         elapsed = 0
         startedAt = nil
         playHaptic(for: .click)
-        releaseAudio()
     }
 
     private func stopTimer() {
@@ -286,7 +285,6 @@ struct WatchBreathingSessionView: View {
         startedAt = nil
         stopTimer()
         playPhaseCue(for: .finished)
-        releaseAudio()
     }
 
     private func playHaptic(for type: WKHapticType) {
@@ -350,7 +348,8 @@ struct WatchBreathingSessionView: View {
             player.play()
             activeFeedbackPlayers.append(player)
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration + 0.25) {
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: UInt64((duration + 0.25) * 1_000_000_000))
                 activeFeedbackPlayers.removeAll { $0 === player }
             }
         } catch {
