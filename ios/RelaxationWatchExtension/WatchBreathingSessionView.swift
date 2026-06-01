@@ -52,7 +52,13 @@ struct WatchBreathingSessionView: View {
             releaseAudio()
         }
         .onChange(of: scenePhase) { _, newPhase in
-            if isActive && (newPhase == .active || newPhase == .inactive || newPhase == .background) {
+            guard isActive else { return }
+
+            if newPhase == .active {
+                syncProgressFromClock(playHaptics: false)
+                scheduleTimer()
+            } else if newPhase == .inactive || newPhase == .background {
+                stopTimer()
                 syncProgressFromClock(playHaptics: false)
             }
         }
@@ -258,12 +264,20 @@ struct WatchBreathingSessionView: View {
         currentPhase = .inhale
         countdown = method.inhale
         playPhaseCue(for: .inhale)
+        scheduleTimer()
+    }
 
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+    private func scheduleTimer() {
+        stopTimer()
+
+        let sessionTimer = Timer(timeInterval: 1, repeats: true) { _ in
             Task { @MainActor in
-                syncProgressFromClock(playHaptics: true)
+                advanceSessionByOneSecond()
             }
         }
+        sessionTimer.tolerance = 0.05
+        RunLoop.main.add(sessionTimer, forMode: .common)
+        timer = sessionTimer
     }
 
     private func stopSession() {
@@ -280,6 +294,46 @@ struct WatchBreathingSessionView: View {
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
+    }
+
+    private func advanceSessionByOneSecond() {
+        guard isActive else { return }
+
+        if elapsed + 1 >= plan.totalDuration {
+            elapsed = plan.totalDuration
+            finishSession()
+            return
+        }
+
+        elapsed += 1
+
+        if countdown > 1 {
+            countdown -= 1
+            return
+        }
+
+        switch currentPhase {
+        case .inhale:
+            if method.hold > 0 {
+                currentPhase = .hold
+                countdown = method.hold
+            } else {
+                currentPhase = .exhale
+                countdown = method.exhale
+            }
+            playPhaseCue(for: currentPhase)
+        case .hold:
+            currentPhase = .exhale
+            countdown = method.exhale
+            playPhaseCue(for: currentPhase)
+        case .exhale:
+            currentCycle = min(currentCycle + 1, plan.cycles)
+            currentPhase = .inhale
+            countdown = method.inhale
+            playPhaseCue(for: currentPhase)
+        case .ready, .finished:
+            break
+        }
     }
 
     private func syncProgressFromClock(playHaptics: Bool) {
