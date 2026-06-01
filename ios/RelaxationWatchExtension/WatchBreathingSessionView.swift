@@ -214,8 +214,13 @@ struct WatchBreathingSessionView: View {
                     .tint(WatchTheme.foreground)
                     .scaleEffect(x: 1, y: 1.15, anchor: .center)
 
-                Text(BreathingExerciseMath.formattedDuration(plan.totalDuration))
+                Text(sessionTimeText)
                     .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(WatchTheme.secondary)
+                    .monospacedDigit()
+
+                Text("总时长 \(BreathingExerciseMath.formattedDuration(plan.totalDuration))")
+                    .font(.system(size: 9, weight: .medium, design: .monospaced))
                     .foregroundStyle(WatchTheme.muted)
                     .monospacedDigit()
             }
@@ -306,6 +311,7 @@ struct WatchBreathingSessionView: View {
     }
 
     private func finishSession() {
+        recordCompletedSession()
         currentPhase = .finished
         isActive = false
         countdown = 0
@@ -313,6 +319,29 @@ struct WatchBreathingSessionView: View {
         startedAt = nil
         stopTimer()
         playPhaseCue(for: .finished)
+    }
+
+    private var sessionTimeText: String {
+        if currentPhase == .finished {
+            return "已完成"
+        }
+
+        let remaining = max(plan.totalDuration - elapsed, 0)
+        return "剩余 \(BreathingExerciseMath.formattedDuration(remaining))"
+    }
+
+    private func recordCompletedSession() {
+        let completedAt = Date()
+        let startDate = startedAt ?? completedAt.addingTimeInterval(-TimeInterval(plan.totalDuration))
+        let record = WatchPracticeRecord(
+            id: UUID(),
+            methodID: method.id,
+            methodName: method.name,
+            startedAt: startDate,
+            completedAt: completedAt,
+            durationSeconds: plan.totalDuration
+        )
+        WatchPracticeHistoryStore.shared.append(record)
     }
 
     private func playHaptic(for type: WKHapticType) {
