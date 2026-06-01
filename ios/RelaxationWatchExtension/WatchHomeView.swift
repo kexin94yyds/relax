@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 struct WatchHomeView: View {
-    @State private var summary = WatchPracticeHistoryStore.shared.summary()
+    @State private var summary = WatchPracticeSummary.empty
 
     var body: some View {
         NavigationStack {
@@ -145,8 +145,17 @@ struct WatchPracticeSummary: Equatable {
     let yearCount: Int
     let todayDurationSeconds: Int
     let latestRecord: WatchPracticeRecord?
+
+    static let empty = WatchPracticeSummary(
+        todayCount: 0,
+        monthCount: 0,
+        yearCount: 0,
+        todayDurationSeconds: 0,
+        latestRecord: nil
+    )
 }
 
+@MainActor
 final class WatchPracticeHistoryStore {
     static let shared = WatchPracticeHistoryStore()
 
