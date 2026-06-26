@@ -7,22 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		114638D1AB7B4073AC56E69B /* MacBreathingSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3101AA298380E5E71BFEAF2B /* MacBreathingSessionModel.swift */; };
+		285CCB8066C98B7D53C0798F /* RelaxationTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */; };
 		2C1EEA09DBA2CD7C3EC1FAFC /* RelaxationAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */; };
+		32D30B24E9272992A2E4DF76 /* SoundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72C75180958234DFE6F93E /* SoundMode.swift */; };
 		3450F44044CC2FF00BAEF398 /* BreathingExerciseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07EA84CA6FB5F3E8ACE4B61 /* BreathingExerciseMath.swift */; };
+		424BE169B8CF3CA675713ACD /* BreathingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744002A7502609DB44B28D7A /* BreathingMethod.swift */; };
 		4AEFA6342E8B9EBF71480286 /* BreathingExerciseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07EA84CA6FB5F3E8ACE4B61 /* BreathingExerciseMath.swift */; };
 		4E7A20CF2D2C0A4DB2BA02CF /* BreathingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744002A7502609DB44B28D7A /* BreathingMethod.swift */; };
+		4EBC274FBE6F0AE5562C89F4 /* RelaxationMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D33D8705A15AF327D21798C /* RelaxationMacApp.swift */; };
 		56EA7B84CAA01528009DAFA7 /* BreathingPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */; };
+		6428BBC79C422BE203A788DC /* MacMenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD6F4EE7FD17593377E764C /* MacMenuBarView.swift */; };
 		69AEF770C208C60B926F7F7B /* RelaxationWatchExtensionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A73CAD34CD6ADEED4A87CE /* RelaxationWatchExtensionApp.swift */; };
 		6CFF1E6D6849BC9417FADB8A /* BreathingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9936D699991D5B51238A1C /* BreathingView.swift */; };
 		6FEDB1E0E4A56F139431A858 /* SoundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72C75180958234DFE6F93E /* SoundMode.swift */; };
+		70F1A10B6633ACB2282F95AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D19F35E113CCCC77C3157687 /* Assets.xcassets */; };
 		731650ABBF5F78DA97777E80 /* WatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B23433FFBA0832FA8C3B54 /* WatchTheme.swift */; };
 		7A9824212557BC1D2CD33403 /* SoundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72C75180958234DFE6F93E /* SoundMode.swift */; };
 		8607E013B0AD224F9618DF87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 785084DC8F116786CF3B029C /* Assets.xcassets */; };
 		89C30F96937B75C5E422B634 /* WatchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECDCCDF3610E7CC62EBC0BD /* WatchHomeView.swift */; };
 		8C4C9CB3DBDB6BB7B9E5A8FF /* RelaxationWatchApp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 9221D869BB4E0247BD3B9D83 /* RelaxationWatchApp.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A005B0CE1EBF2BD2C7BEC4FB /* BreathingPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */; };
 		A689F08BB14AB0A406473E98 /* FeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8672DD74656C11E4AFF079 /* FeedbackService.swift */; };
+		AE54CE4C2AB9A352D4EE8618 /* BreathingExerciseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07EA84CA6FB5F3E8ACE4B61 /* BreathingExerciseMath.swift */; };
 		D4604F2BDE6C775EC9C53470 /* RelaxationTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */; };
 		DAF0403843ABB4D312E0AADA /* RelaxationWatchExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DB13650177ADF458447ED4A5 /* RelaxationWatchExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DBE212679D99876768DD1305 /* MacBreathingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1451FDFBBB75838A90EEF2C6 /* MacBreathingSessionView.swift */; };
 		E2EB985DC61AAB2D5B7AFC68 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214F1C97BA7F8422CF229D67 /* HomeView.swift */; };
 		E65ED63751AD7F49EA93F989 /* BreathingPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */; };
 		EAF2F50D048BEE9F0768E456 /* WatchBreathingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F501B9CB3918830C6CF2B4 /* WatchBreathingSessionView.swift */; };
@@ -76,10 +86,13 @@
 /* Begin PBXFileReference section */
 		00D2461A90430C6101B32E67 /* RelaxationApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RelaxationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05F501B9CB3918830C6CF2B4 /* WatchBreathingSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchBreathingSessionView.swift; sourceTree = "<group>"; };
+		0D33D8705A15AF327D21798C /* RelaxationMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationMacApp.swift; sourceTree = "<group>"; };
+		1451FDFBBB75838A90EEF2C6 /* MacBreathingSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBreathingSessionView.swift; sourceTree = "<group>"; };
 		1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingPhase.swift; sourceTree = "<group>"; };
 		214F1C97BA7F8422CF229D67 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationTheme.swift; sourceTree = "<group>"; };
 		2E9936D699991D5B51238A1C /* BreathingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingView.swift; sourceTree = "<group>"; };
+		3101AA298380E5E71BFEAF2B /* MacBreathingSessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBreathingSessionModel.swift; sourceTree = "<group>"; };
 		3ECDCCDF3610E7CC62EBC0BD /* WatchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHomeView.swift; sourceTree = "<group>"; };
 		4A72C75180958234DFE6F93E /* SoundMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMode.swift; sourceTree = "<group>"; };
 		565E4E73E7FD4D85998D7F8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -89,16 +102,29 @@
 		785084DC8F116786CF3B029C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodCardView.swift; sourceTree = "<group>"; };
 		9221D869BB4E0247BD3B9D83 /* RelaxationWatchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelaxationWatchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9657E17627C350D7F4669103 /* RelaxationMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelaxationMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD8672DD74656C11E4AFF079 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationAppApp.swift; sourceTree = "<group>"; };
 		C07EA84CA6FB5F3E8ACE4B61 /* BreathingExerciseMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingExerciseMath.swift; sourceTree = "<group>"; };
 		C1A25B363A28CD5C6094737C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C9A73CAD34CD6ADEED4A87CE /* RelaxationWatchExtensionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationWatchExtensionApp.swift; sourceTree = "<group>"; };
+		CEFB1BFFB0C22730147EDCC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D19F35E113CCCC77C3157687 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D5FF45AC08D150CD3F0C7FB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB13650177ADF458447ED4A5 /* RelaxationWatchExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RelaxationWatchExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECD6F4EE7FD17593377E764C /* MacMenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMenuBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		01BE8AE3FC3D0E6B60713858 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1451FDFBBB75838A90EEF2C6 /* MacBreathingSessionView.swift */,
+				ECD6F4EE7FD17593377E764C /* MacMenuBarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		33D85439A7BE3AC9AD05CACD /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				6A9CDE29DC2366049C9DFB1D /* RelaxationApp */,
+				FBDE9D73C7F5453F6364EDEA /* RelaxationMac */,
 				38F3C2DC9110643A99B7514B /* RelaxationWatchApp */,
 				41B0EA6E09BF4CD7DE611AD3 /* RelaxationWatchExtension */,
 				462642D766C5612350E98038 /* Shared */,
@@ -175,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				00D2461A90430C6101B32E67 /* RelaxationApp.app */,
+				9657E17627C350D7F4669103 /* RelaxationMac.app */,
 				9221D869BB4E0247BD3B9D83 /* RelaxationWatchApp.app */,
 				DB13650177ADF458447ED4A5 /* RelaxationWatchExtension.appex */,
 			);
@@ -189,6 +217,18 @@
 				4A72C75180958234DFE6F93E /* SoundMode.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		FBDE9D73C7F5453F6364EDEA /* RelaxationMac */ = {
+			isa = PBXGroup;
+			children = (
+				D19F35E113CCCC77C3157687 /* Assets.xcassets */,
+				CEFB1BFFB0C22730147EDCC6 /* Info.plist */,
+				3101AA298380E5E71BFEAF2B /* MacBreathingSessionModel.swift */,
+				0D33D8705A15AF327D21798C /* RelaxationMacApp.swift */,
+				01BE8AE3FC3D0E6B60713858 /* Views */,
+			);
+			path = RelaxationMac;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,6 +290,24 @@
 			productReference = DB13650177ADF458447ED4A5 /* RelaxationWatchExtension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
+		FFAB91F266EA1ECC4D6BA5CE /* RelaxationMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C8A6D93B3CF582022259F63F /* Build configuration list for PBXNativeTarget "RelaxationMac" */;
+			buildPhases = (
+				72A6EB0B612B6A52AE63EFFF /* Sources */,
+				4D64442048B064683F3BF08B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RelaxationMac;
+			packageProductDependencies = (
+			);
+			productName = RelaxationMac;
+			productReference = 9657E17627C350D7F4669103 /* RelaxationMac.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -271,6 +329,10 @@
 						DevelopmentTeam = UM3Z9G5DNH;
 						ProvisioningStyle = Automatic;
 					};
+					FFAB91F266EA1ECC4D6BA5CE = {
+						DevelopmentTeam = UM3Z9G5DNH;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 41BA3331C9F5AC7AA6D48611 /* Build configuration list for PBXProject "RelaxationApp" */;
@@ -288,6 +350,7 @@
 			projectRoot = "";
 			targets = (
 				2E72D55C5052B968A7B3C7F0 /* RelaxationApp */,
+				FFAB91F266EA1ECC4D6BA5CE /* RelaxationMac */,
 				2A31755819EE6CC3343CDB52 /* RelaxationWatchApp */,
 				BEBA5216CB42BF35E578FF92 /* RelaxationWatchExtension */,
 			);
@@ -295,6 +358,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4D64442048B064683F3BF08B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70F1A10B6633ACB2282F95AF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CAF9AE2C8C2BE6AAB6A44537 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -314,6 +385,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		72A6EB0B612B6A52AE63EFFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE54CE4C2AB9A352D4EE8618 /* BreathingExerciseMath.swift in Sources */,
+				424BE169B8CF3CA675713ACD /* BreathingMethod.swift in Sources */,
+				A005B0CE1EBF2BD2C7BEC4FB /* BreathingPhase.swift in Sources */,
+				114638D1AB7B4073AC56E69B /* MacBreathingSessionModel.swift in Sources */,
+				DBE212679D99876768DD1305 /* MacBreathingSessionView.swift in Sources */,
+				6428BBC79C422BE203A788DC /* MacMenuBarView.swift in Sources */,
+				4EBC274FBE6F0AE5562C89F4 /* RelaxationMacApp.swift in Sources */,
+				285CCB8066C98B7D53C0798F /* RelaxationTheme.swift in Sources */,
+				32D30B24E9272992A2E4DF76 /* SoundMode.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		82910C94C4DDF56296227666 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -378,6 +465,25 @@
 			};
 			name = Release;
 		};
+		1037E398C3B9596D5C4C525B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = UM3Z9G5DNH;
+				INFOPLIST_FILE = RelaxationMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.relaxationmac;
+				PRODUCT_NAME = RelaxationMac;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
 		1EC732ECB6769D99469E7479 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -430,6 +536,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -440,6 +547,25 @@
 				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
+		};
+		1FE5011A2459DAA14A97FB94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = UM3Z9G5DNH;
+				INFOPLIST_FILE = RelaxationMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.relaxationmac;
+				PRODUCT_NAME = RelaxationMac;
+				SDKROOT = macosx;
+			};
+			name = Release;
 		};
 		424F628D11C72FB802B3C13D /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -487,6 +613,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -621,6 +748,15 @@
 			buildConfigurations = (
 				E2827EC1DCD3BA7D3A3F3FE8 /* Debug */,
 				07AE7516D3C8EC043E26052C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C8A6D93B3CF582022259F63F /* Build configuration list for PBXNativeTarget "RelaxationMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1037E398C3B9596D5C4C525B /* Debug */,
+				1FE5011A2459DAA14A97FB94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
