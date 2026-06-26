@@ -16,6 +16,7 @@ struct MacBreathingSessionView: View {
             }
             .padding(28)
         }
+        .background(MacFloatingWindowConfigurator())
     }
 
     private var header: some View {

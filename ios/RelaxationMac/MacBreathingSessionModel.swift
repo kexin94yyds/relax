@@ -44,6 +44,7 @@ final class MacBreathingSessionModel: ObservableObject {
 
     private var startedAt: Date?
     private var timer: Timer?
+    private let feedback = MacFeedbackService()
 
     var plan: PracticePlan {
         BreathingExerciseMath.plan(for: method, targetSeconds: duration.seconds)
@@ -100,11 +101,13 @@ final class MacBreathingSessionModel: ObservableObject {
         countdown = self.method.inhale
         currentCycle = 1
         elapsed = 0
+        feedback.exerciseStarted(phase: currentPhase)
         scheduleTimer()
     }
 
     func stop() {
         stopTimer()
+        feedback.exerciseStopped()
         isActive = false
         startedAt = nil
         currentPhase = .ready
@@ -134,6 +137,8 @@ final class MacBreathingSessionModel: ObservableObject {
         guard isActive, let startedAt else { return }
 
         let realElapsed = min(max(Int(Date().timeIntervalSince(startedAt)), 0), plan.totalDuration)
+        let previousPhase = currentPhase
+        let previousCycle = currentCycle
         let snapshot = BreathingExerciseMath.snapshot(
             for: realElapsed,
             method: method,
@@ -150,6 +155,14 @@ final class MacBreathingSessionModel: ObservableObject {
         countdown = snapshot.countdown
         currentCycle = snapshot.cycle
         elapsed = snapshot.elapsed
+
+        if countdown <= 3 && countdown > 0 {
+            feedback.countdownTick(count: countdown)
+        }
+
+        if currentPhase != previousPhase || currentCycle != previousCycle {
+            feedback.phaseChanged(phase: currentPhase)
+        }
     }
 
     private func finish() {
@@ -160,5 +173,6 @@ final class MacBreathingSessionModel: ObservableObject {
         countdown = 0
         currentCycle = plan.cycles
         elapsed = plan.totalDuration
+        feedback.finished()
     }
 }

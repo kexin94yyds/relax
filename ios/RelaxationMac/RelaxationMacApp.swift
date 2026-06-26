@@ -5,8 +5,10 @@ struct RelaxationMacApp: App {
     @StateObject private var session = MacBreathingSessionModel()
 
     var body: some Scene {
-        MenuBarExtra("relax", systemImage: "leaf") {
+        MenuBarExtra {
             MacMenuBarView(session: session)
+        } label: {
+            Label("relax", systemImage: session.isActive ? "leaf.fill" : "leaf")
         }
         .menuBarExtraStyle(.window)
 
