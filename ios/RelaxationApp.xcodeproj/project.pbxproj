@@ -10,6 +10,7 @@
 		114638D1AB7B4073AC56E69B /* MacBreathingSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3101AA298380E5E71BFEAF2B /* MacBreathingSessionModel.swift */; };
 		285CCB8066C98B7D53C0798F /* RelaxationTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */; };
 		2C1EEA09DBA2CD7C3EC1FAFC /* RelaxationAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */; };
+		30A495864ACA216C3070C750 /* MacFeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9956493FA43761E31F0C64 /* MacFeedbackService.swift */; };
 		32D30B24E9272992A2E4DF76 /* SoundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72C75180958234DFE6F93E /* SoundMode.swift */; };
 		3450F44044CC2FF00BAEF398 /* BreathingExerciseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07EA84CA6FB5F3E8ACE4B61 /* BreathingExerciseMath.swift */; };
 		424BE169B8CF3CA675713ACD /* BreathingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744002A7502609DB44B28D7A /* BreathingMethod.swift */; };
@@ -33,6 +34,7 @@
 		D4604F2BDE6C775EC9C53470 /* RelaxationTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B96C03FB1093FEC6EE1B678 /* RelaxationTheme.swift */; };
 		DAF0403843ABB4D312E0AADA /* RelaxationWatchExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DB13650177ADF458447ED4A5 /* RelaxationWatchExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DBE212679D99876768DD1305 /* MacBreathingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1451FDFBBB75838A90EEF2C6 /* MacBreathingSessionView.swift */; };
+		DF85B5922A154B81DCAADC9E /* MacFloatingWindowConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1DF121B5303337E6EAC108 /* MacFloatingWindowConfigurator.swift */; };
 		E2EB985DC61AAB2D5B7AFC68 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214F1C97BA7F8422CF229D67 /* HomeView.swift */; };
 		E65ED63751AD7F49EA93F989 /* BreathingPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D033BFD2D1DEB51A1B33104 /* BreathingPhase.swift */; };
 		EAF2F50D048BEE9F0768E456 /* WatchBreathingSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F501B9CB3918830C6CF2B4 /* WatchBreathingSessionView.swift */; };
@@ -96,6 +98,7 @@
 		3ECDCCDF3610E7CC62EBC0BD /* WatchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchHomeView.swift; sourceTree = "<group>"; };
 		4A72C75180958234DFE6F93E /* SoundMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMode.swift; sourceTree = "<group>"; };
 		565E4E73E7FD4D85998D7F8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5A9956493FA43761E31F0C64 /* MacFeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFeedbackService.swift; sourceTree = "<group>"; };
 		60B23433FFBA0832FA8C3B54 /* WatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTheme.swift; sourceTree = "<group>"; };
 		6CD2059661FC52C0C9DA3863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		744002A7502609DB44B28D7A /* BreathingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingMethod.swift; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		8E85B94C4FE8FD70200D04FD /* MethodCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodCardView.swift; sourceTree = "<group>"; };
 		9221D869BB4E0247BD3B9D83 /* RelaxationWatchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelaxationWatchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9657E17627C350D7F4669103 /* RelaxationMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelaxationMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C1DF121B5303337E6EAC108 /* MacFloatingWindowConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFloatingWindowConfigurator.swift; sourceTree = "<group>"; };
 		BD8672DD74656C11E4AFF079 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		BDA9DF487D46D80EB10E3750 /* RelaxationAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxationAppApp.swift; sourceTree = "<group>"; };
 		C07EA84CA6FB5F3E8ACE4B61 /* BreathingExerciseMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingExerciseMath.swift; sourceTree = "<group>"; };
@@ -120,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				1451FDFBBB75838A90EEF2C6 /* MacBreathingSessionView.swift */,
+				9C1DF121B5303337E6EAC108 /* MacFloatingWindowConfigurator.swift */,
 				ECD6F4EE7FD17593377E764C /* MacMenuBarView.swift */,
 			);
 			path = Views;
@@ -225,6 +230,7 @@
 				D19F35E113CCCC77C3157687 /* Assets.xcassets */,
 				CEFB1BFFB0C22730147EDCC6 /* Info.plist */,
 				3101AA298380E5E71BFEAF2B /* MacBreathingSessionModel.swift */,
+				5A9956493FA43761E31F0C64 /* MacFeedbackService.swift */,
 				0D33D8705A15AF327D21798C /* RelaxationMacApp.swift */,
 				01BE8AE3FC3D0E6B60713858 /* Views */,
 			);
@@ -394,6 +400,8 @@
 				A005B0CE1EBF2BD2C7BEC4FB /* BreathingPhase.swift in Sources */,
 				114638D1AB7B4073AC56E69B /* MacBreathingSessionModel.swift in Sources */,
 				DBE212679D99876768DD1305 /* MacBreathingSessionView.swift in Sources */,
+				30A495864ACA216C3070C750 /* MacFeedbackService.swift in Sources */,
+				DF85B5922A154B81DCAADC9E /* MacFloatingWindowConfigurator.swift in Sources */,
 				6428BBC79C422BE203A788DC /* MacMenuBarView.swift in Sources */,
 				4EBC274FBE6F0AE5562C89F4 /* RelaxationMacApp.swift in Sources */,
 				285CCB8066C98B7D53C0798F /* RelaxationTheme.swift in Sources */,
